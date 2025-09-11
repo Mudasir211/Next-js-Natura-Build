@@ -14,45 +14,45 @@ export default function StoryReviews() {
   const reviews = [
     {
       src: rev1,
-      author: "Aisha K.",
+      author: "Rizwan Ali.",
       rating: 5,
       excerpt:
-        "My hairline seriously improved in 3 weeks. Packaging was neat and arrived fast!",
+        "Ma abhi tak 2 bottle use kar chuka hon This product is literally magical Meri hair line bhot khrab hogai thi or Literally meri regrowth start hoi or ab meri hair line bhot achi hogai 100 percent recommend Sukriya to you guys Allah kush rkha.",
     },
     {
       src: rev2,
-      author: "Bilal R.",
+      author: "Rizwan Ali.",
       rating: 5,
       excerpt:
-        "Natura's customer service helped me choose the right size. Product smells natural and works.",
+        "",
     },
     {
       src: rev3,
-      author: "Sara M.",
-      rating: 4,
+      author: "Sara Ali.",
+      rating: 5,
       excerpt:
-        "Reduced my dandruff within 2 uses. Highly recommend for sensitive scalps.",
+        "Its been a wonderful experience, i will order again soon, as its finishing already. My kids hair were really frizzy, and at front head hair were less, but now mashaa Allah it's growing so quick and looks more beautiful silky and shiny. I will share the photos too.",
     },
     {
       src: rev4,
       author: "Omar N.",
       rating: 5,
       excerpt:
-        "Great value. Real herbal ingredients—no harsh chemicals as advertised.",
+        "I used half of the bottle Brother Aresults bhot acha Iga impressing 4 5 bar use krna se baal bikul silky hogai lak dost ko bi recommend kia woh bi ap se order kra ga Love this product.",
     },
     {
       src: rev5,
-      author: "Fatima S.",
+      author: "Ehtisham Malik.",
       rating: 5,
       excerpt:
-        "Ordered 2 bottles, both arrived quickly. My family has been using it daily.",
+        "Mana abhi 4 5 bar use kia Or 5 wash ma hi baal bikul maza dar hogai Bhot fizzy or dry tha Density bi zada Igrhi ha Ap ko pta hna mera balo ki density zada ki vja se rough lagta tha Ikin is se bikul silky hogai Ya khtam ho la phir in sha allah 2 or manvani Apna dost ka liya bi",
     },
     {
       src: rev6,
       author: "Hassan A.",
-      rating: 4,
+      rating: 5,
       excerpt:
-        "Effective oil. Slight scent but nothing overpowering—results are promising.",
+        "",
     },
   ];
 
