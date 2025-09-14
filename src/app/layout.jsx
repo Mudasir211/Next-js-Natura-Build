@@ -2,10 +2,20 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { Oswald,Outfit } from "next/font/google";
+
+const oswald = Oswald({
+  subsets: ["latin"],
+  weights: ["400", "500", "600", "700"], // pick what you need
+  variable: "--font-oswald", // optional: for CSS variables
+});
 
 
-
-
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // pick what you need
+  variable: "--font-outfit", // optional: for CSS variables
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -14,9 +24,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html className={`${oswald.variable} ${outfit.variable}`} lang="en">
       <body
-        className={''}
+        className={outfit.className}
       >
        
     <Navbar/>

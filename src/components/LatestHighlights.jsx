@@ -6,7 +6,9 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Oswald } from "next/font/google";
 
+const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 export default function LatestHighlights() {
   const highlights = [
     { title: "Behind the Scenes", src: "/vid1.mp4" },
@@ -17,7 +19,7 @@ export default function LatestHighlights() {
   return (
     <section className="bg-white border-t border-green-400 md:mx-14 py-10">
       <div className="max-w-7xl mx-auto px-6 text-center flex flex-col space-y-12">
-        <h2 className="text-3xl font-bold text-green-800">
+        <h2 className={`text-3xl  font-bold text-green-800 ${oswald.className}`}>
           #Our Latest <span className="text-green-600">Highlights</span><div className="w-full flex justify-center mt-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

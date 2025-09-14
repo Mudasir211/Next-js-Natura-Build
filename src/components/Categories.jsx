@@ -11,6 +11,9 @@ import Weight from "../assets/Weight.png";
 import Formulaes from "../assets/Formulaes.png";
 import Honey from "../assets/Honey.png";
 import Spices from "../assets/Spices.png";
+import { Oswald } from "next/font/google";
+
+const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 
 function Categories() {
   const categories = [
@@ -24,32 +27,23 @@ function Categories() {
   ];
 
   return (
-    <section className="py-12 bg-white">
-     <div className="max-w-7xl mx-auto space-y-10">
+    <section className="py-12 bg-gradient-to-b from-green-50 via-white to-green-50">
+      <div className="max-w-7xl mx-auto space-y-16">
         {/* Heading */}
         <div className="text-center px-4">
-          <h2 className="text-2xl font-bold text-green-800 inline-block relative">
+          <h2
+            className={`text-2xl md:text-4xl font-bold mb-7 inline-block relative ${oswald.className} -skew-x-10 bg-gradient-to-r from-green-700 via-emerald-500 to-green-400 text-transparent bg-clip-text`}
+          >
             Browse Our Categories
-            <div className="w-full flex justify-center mt-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 200 20"
-                className="w-32 h-6 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-              >
-                <path d="M5 15 C50 -5, 150 25, 195 10" />
-              </svg>
-            </div>
           </h2>
 
-          {/* ✅ Styled description */}
-          <p className="mt-4 text-gray-600 max-w-lg mx-auto text-xs sm:text-base leading-relaxed">
-            Explore our natural wellness range – from <span className="text-green-700 font-medium">hair Care </span> 
-            to <span className="text-green-700 font-medium">superfoods, vitality boosters</span>, and 
-            <span className="text-green-700 font-medium"> pure spices</span>.  
-            Every category is crafted to support your health journey.
+          {/* Description */}
+          <p className="mt-4 font-bold text-gray-600 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
+            Explore our natural wellness range – from{" "}
+            <span className="text-green-700 font-medium">hair care</span> to{" "}
+            <span className="text-green-700 font-medium">superfoods, vitality boosters</span>, and{" "}
+            <span className="text-green-700 font-medium">pure spices</span>. Every category is crafted to
+            support your health journey.
           </p>
         </div>
 
@@ -62,12 +56,19 @@ function Categories() {
                 href={cat.href}
                 className="relative group flex flex-col w-[160px] h-[120px] sm:w-[160px] sm:h-[170px] md:w-[200px] md:h-[190px] mx-2 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 transform hover:scale-105"
               >
+                {/* Background Image */}
                 <Image
                   src={cat.img}
                   alt={cat.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
+
+                {/* Gradient Overlay */}
+               
+
+                {/* Category Name */}
+              
               </Link>
             ))}
           </Marquee>

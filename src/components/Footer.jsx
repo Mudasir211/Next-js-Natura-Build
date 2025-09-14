@@ -16,7 +16,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1bbd67] border-gray-400 border-t text-white">
+    <footer className="bg-[#08af56] border-gray-400 border-t text-white">
       {/* Logo */}
       <div className="flex items-center md:justify-start md:px-6 justify-center p-6 bg-white">
         <Image alt="Natura Logo" src={Logo} width={110} height={110} />
@@ -37,7 +37,7 @@ export default function Footer() {
                 target="_blank"
                 className="hover:text-green-300"
               >
-                Meer Muktar Road, Bhalwal, Dist Sargodha
+                Bhalwal, Dist Sargodha
               </Link>
             </li>
             <li className="flex items-center gap-2">

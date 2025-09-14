@@ -7,7 +7,9 @@ import heartbeat from '../assets/heartbeat.webp'
 import planetearth from '../assets/planet-earth.webp'
 import foodstore from '../assets/food-store.webp'
 import percent from '../assets/100-percent.webp'
+import { Oswald } from "next/font/google";
 
+const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 
 export default function AboutWhyNatura() {
   return (
@@ -30,7 +32,7 @@ export default function AboutWhyNatura() {
 
     {/* Text (second on mobile, first on desktop) */}
     <div className="space-y-6 order-2 md:order-1">
-      <h2 className="text-4xl font-extrabold text-green-800">
+      <h2 className={`text-4xl font-extrabold text-green-800 ${oswald.className}`}>
         About <span className="text-green-600">Natura</span>
       </h2>
 
@@ -129,7 +131,7 @@ export default function AboutWhyNatura() {
           {/* Right Content */}
           <div className="text-center md:text-left space-y-10">
             <div>
-              <h2 className="text-3xl font-bold text-green-800">
+              <h2 className={`text-3xl font-bold text-green-800 ${oswald.className}`}>
                 Why Choose <span className="text-green-600">Natura?</span>
               </h2>
               <p className="mt-4 text-gray-600">

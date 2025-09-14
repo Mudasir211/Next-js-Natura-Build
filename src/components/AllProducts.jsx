@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import NaturaHairOil from "../assets/NaturaHairOil.png";
 import Moringa from "../assets/Moringa.jpeg";
+import { Oswald } from "next/font/google";
 
+const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 export default function AllProducts() {
   const products = [
     { id: 1, name: "Natura Hair Oil", price: "19.99", img: NaturaHairOil },
@@ -17,22 +19,12 @@ export default function AllProducts() {
     <section className="py-16 bg-gradient-to-b from-green-50 to-white">
       <div className="max-w-7xl mx-auto px-6 text-center space-y-10">
         {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl font-bold text-green-800">
-          🌿 All Products
-          <div className="w-full flex justify-center mt-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 200 20"
-              className="w-32 h-6 text-green-600"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-            >
-              <path d="M5 15 C50 -5, 150 25, 195 10" />
-            </svg>
-          </div>
+        <h2 className={`text-3xl -skew-x-10 md:text-4xl ${oswald.className} font-bold text-green-800`
+        }>
+         All Products
+          
         </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-gray-600 font-bold max-w-2xl mx-auto">
           Explore our full range of{" "}
           <span className="text-green-700 font-medium">
             herbal and natural products

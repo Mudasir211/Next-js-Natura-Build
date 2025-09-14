@@ -9,7 +9,9 @@ import rev3 from "../assets/rev3.jpeg";
 import rev4 from "../assets/rev4.jpeg";
 import rev5 from "../assets/rev5.jpeg";
 import rev6 from "../assets/rev6.jpeg";
+import { Oswald } from "next/font/google";
 
+const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 export default function StoryReviews() {
   const reviews = [
     {
@@ -95,7 +97,7 @@ export default function StoryReviews() {
     <section className="w-full px-5 md:px-8">
       {/* Heading + Intro */}
       <div className="w-full text-center space-y-6 px-4 md:px-0">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-green-800">
+        <h2 className={`text-3xl md:text-4xl font-extrabold text-green-800 ${oswald.className}`}>
           Real Feedback • Real Results
         </h2>
 
