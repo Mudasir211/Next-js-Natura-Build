@@ -16,7 +16,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#016630] border-gray-400 border-t text-white">
+    <footer className="bg-[#1bbd67] border-gray-400 border-t text-white">
       {/* Logo */}
       <div className="flex items-center md:justify-start md:px-6 justify-center p-6 bg-white">
         <Image alt="Natura Logo" src={Logo} width={110} height={110} />
