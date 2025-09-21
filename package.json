@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.32.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.3.2",
     "@reduxjs/toolkit": "^2.8.2",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
     "crypto": "^1.0.1",
     "framer-motion": "^12.23.12",
     "google-auth-library": "^9.15.1",
@@ -22,9 +25,12 @@
     "mongoose": "^8.15.1",
     "nanoid": "^5.1.5",
     "next": "15.3.2",
+    "next-cloudinary": "^6.16.0",
+    "nodemailer": "^7.0.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-fast-marquee": "^1.6.5",
+    "react-hot-toast": "^2.6.0",
     "react-redux": "^9.2.0",
     "swiper": "^11.2.10",
     "tailwind-scrollbar-hide": "^4.0.0"

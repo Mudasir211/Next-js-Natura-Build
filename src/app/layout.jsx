@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { Oswald,Outfit } from "next/font/google";
-
+import { ClerkProvider } from "@clerk/nextjs";
 const oswald = Oswald({
   subsets: ["latin"],
   weights: ["400", "500", "600", "700"], // pick what you need
@@ -24,6 +24,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+
+    <ClerkProvider>
     <html className={`${oswald.variable} ${outfit.variable}`} lang="en">
       <body
         className={outfit.className}
@@ -33,6 +35,6 @@ export default function RootLayout({ children }) {
         {children}
         <Footer/>
       </body>
-    </html>
+    </html></ClerkProvider>
   );
 }

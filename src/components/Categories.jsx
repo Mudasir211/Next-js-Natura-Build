@@ -38,7 +38,7 @@ function Categories() {
           </h2>
 
           {/* Description */}
-          <p className="mt-4 font-bold text-gray-600 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
+          <p className="mt-4 font-bold text-gray-600 max-w-lg mx-auto px-3 text-sm sm:text-base leading-relaxed">
             Explore our natural wellness range – from{" "}
             <span className="text-green-700 font-medium">hair care</span> to{" "}
             <span className="text-green-700 font-medium">superfoods, vitality boosters</span>, and{" "}

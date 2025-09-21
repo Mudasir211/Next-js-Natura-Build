@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import NavbarWrapper from "./NavbarWrapper";
-import Logo from '../assets/logo.png'
+import Logo from "../assets/logo.png";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
 export default function Navbar() {
   const navLinks = [
     { name: "Home", href: "/" },
@@ -16,7 +18,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src={Logo }
+            src={Logo}
             alt="Natura Logo"
             width={50}
             height={50}
@@ -26,7 +28,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex space-x-8 items-center">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -36,6 +38,19 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+
+          {/* Clerk Auth */}
+          <SignedOut>
+            <Link
+              href="/sign-in"
+              className="px-4 py-2 bg-green-700 text-white rounded-lg shadow hover:bg-green-800 transition"
+            >
+              Sign In
+            </Link>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
 
         {/* Mobile Menu (Client-side logic in NavbarWrapper) */}
