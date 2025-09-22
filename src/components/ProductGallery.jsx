@@ -30,10 +30,10 @@ export default function ProductGallery({ images, title }) {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row-reverse gap-4 flex-1">
+    <div className="flex flex-col justify-center sm:flex-row-reverse gap-4 flex-1">
       {/* Main Image */}
       <div className="flex sm:w-[75%] justify-center">
-        <div className="w-[500px] sm:h-[620px]">
+        <div className="w-[500px] md:w-[600px] lg:w-[500px] px-6 sm:h-[620px]">
           <img
             src={activeImage}
             alt={title}
@@ -57,7 +57,7 @@ export default function ProductGallery({ images, title }) {
                 activeImage === img ? "border-green-600" : "border-gray-200"
               }`}
             >
-              <div className="w-20 h-28 sm:w-20 sm:h-32 bg-white">
+              <div className="w-20 md:w-full h-28 sm:w-20 sm:h-32 bg-white">
                 <img
                   src={img}
                   alt={`Thumbnail ${i + 1}`}

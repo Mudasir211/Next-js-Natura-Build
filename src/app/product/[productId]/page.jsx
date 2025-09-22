@@ -12,82 +12,102 @@ async function getProduct(id) {
   if (!res.ok) throw new Error("Failed to fetch product");
   return res.json();
 }
+async function getReviews(productId) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews?product=${productId}`,
+    { cache: "no-store" }
+  );
+  if (!res.ok) throw new Error("Failed to fetch reviews");
+  return res.json();
+}
+
+
+
+
 
 export default async function ProductPage({ params }) {
-  const { productId } = await params;
+  const { productId } = params;
   const product = await getProduct(productId);
+  const reviews = await getReviews(productId);
+
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
+      : 0;
 
   return (
-    <div className="mt-5 sm:py-14 px-4 py-8 sm:px-8 outfit bg-green-50">
-      <div className="flex flex-col pt-5 sm:flex-row gap-6">
-        {/* ✅ Image Gallery (Client) */}
-        <ProductGallery images={product.images} title={product.title} />
+    <div className="mt-5 px-4 sm:px-8 py-14 outfit bg-green-50">
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* ✅ Image Gallery */}
+        <div className="flex-1">
+          <ProductGallery images={product.images} title={product.title} />
+        </div>
 
         {/* Info */}
-        <div className="break-words sm:w-1/2 sm:px-8">
-          <div className="flex flex-col gap-4 py-8 sm:p-0">
-            <h1 className="text-3xl font-bold text-green-800">
-              {product.title}
-            </h1>
-            <div className="flex items-center gap-4">
-              <AverageStars />{" "}
-              <span className="text-sm text-gray-600">(123 reviews)</span>
+        <div className="flex-1 flex px-3 md:px-10 lg:px-0 flex-col gap-6">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-3xl font-bold text-green-800">{product.title}</h1>
+            <div className="flex items-center gap-2">
+              <AverageStars averageRating={averageRating} size={18} />
+              <span className="text-sm text-gray-600">({reviews.length} reviews)</span>
             </div>
-            <h1 className="text-2xl font-semibold text-green-700">
+
+            <h2 className="text-2xl font-semibold text-green-700">
               {product.onSale ? (
                 <>
                   <span className="line-through text-gray-500 mr-2">
                     Rs.{product.cuttedPrice}
                   </span>
-                  RS.{product.price}
+                  Rs.{product.price}
                 </>
               ) : (
-                `$${product.price}`
+                `Rs.${product.price}`
               )}
-            </h1>
+            </h2>
+
             <p className="text-gray-700">{product.shortDescription}</p>
           </div>
 
           {/* Size + Buttons */}
-          <div className="mb-6 space-y-4">
-            <h1 className="font-semibold text-green-800">Size</h1>
+          <div className="space-y-4">
+            <h3 className="font-semibold text-green-800">Size</h3>
             <div className="inline-block p-3 px-6 bg-green-100 text-green-800 rounded-lg border hover:border-green-600">
               {product.size}
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3">
-              <button className="sm:px-16 px-10 py-3 text-sm text-white bg-green-700 rounded-lg shadow hover:bg-green-800 transition">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button className="flex-1 py-3 text-white bg-green-700 rounded-lg shadow hover:bg-green-800 transition">
                 ADD TO CART
               </button>
-              <button className="sm:px-16 px-10 py-3 text-sm text-white bg-yellow-400 rounded-lg shadow hover:bg-yellow-500 transition">
+              <button className="flex-1 py-3 text-white bg-yellow-400 rounded-lg shadow hover:bg-yellow-500 transition">
                 BUY NOW
               </button>
             </div>
 
             {/* Trust Badges */}
-            <div className="flex justify-center flex-wrap gap-6 sm:gap-14  my-7 text-green-800">
+            <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mt-6 text-green-800">
               <div className="flex flex-col items-center gap-2">
-                <Leaf className="sm:w-8 sm:h-8" />
-                <span className="sm:text-lg text-xs font-bold">100% Ayurvedic</span>
+                <Leaf className="w-8 h-8" />
+                <span className="font-bold text-xs sm:text-lg">100% Ayurvedic</span>
               </div>
               <div className="flex flex-col items-center gap-2">
-                <Globe className="sm:w-8 sm:h-8" />
-                <span className="sm:text-lg text-xs font-bold">Export Quality</span>
+                <Globe className="w-8 h-8" />
+                <span className="font-bold text-xs sm:text-lg">Export Quality</span>
               </div>
               <div className="flex flex-col items-center gap-2">
-                <ShieldCheck className="sm:w-8 sm:h-8" />
-                <span className="sm:text-lg text-xs font-bold">Chemical Free</span>
+                <ShieldCheck className="w-8 h-8" />
+                <span className="font-bold text-xs sm:text-lg">Chemical Free</span>
               </div>
             </div>
           </div>
 
-          {/* Tabs right below buttons */}
+          {/* Tabs */}
           <ProductTabs product={product} />
         </div>
       </div>
-        {/* Reviews */}
-        <ProductReviews productId={product._id} />
+
+      {/* Reviews */}
+      <ProductReviews productId={product._id} />
     </div>
   );
 }

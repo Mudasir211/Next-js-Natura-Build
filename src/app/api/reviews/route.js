@@ -1,7 +1,6 @@
-// /api/reviews/route.js
 import { connectDB } from "@/lib/mongodb";
 import Review from "@/models/Review";
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 export async function GET(req) {
   await connectDB();
@@ -9,95 +8,36 @@ export async function GET(req) {
   const productId = url.searchParams.get("product");
   const query = productId ? { product: productId } : {};
   const reviews = await Review.find(query).sort({ createdAt: -1 });
-  return new Response(JSON.stringify(reviews), { status: 200 });
+  return Response.json(reviews, { status: 200 });
 }
 
 export async function POST(req) {
   await connectDB();
-  const { userId } = await auth();
-  if (!userId)
-    return new Response(JSON.stringify({ message: "Not authorized" }), {
-      status: 401,
-    });
+  const user = await currentUser();
+  if (!user)
+    return Response.json({ message: "Not authorized" }, { status: 401 });
 
-  const body = await req.json();
-  const { product: productId, rating, comment, name } = body;
+  const { product: productId, rating, comment, name, title } = await req.json();
+  if (!productId || !rating || !name || !title) {
+    return Response.json({ message: "Missing fields" }, { status: 400 });
+  }
 
-  if (!productId || !rating || !name)
-    return new Response(JSON.stringify({ message: "Missing fields" }), {
-      status: 400,
-    });
-
-  // Check if user already reviewed this product using Clerk userId
-  const existing = await Review.findOne({
-    product: productId,
-    user: userId,
-  });
-  if (existing)
-    return new Response(
-      JSON.stringify({ message: "You already reviewed this product" }),
+  const existing = await Review.findOne({ product: productId, user: user.id });
+  if (existing) {
+    return Response.json(
+      { message: "You already reviewed this product" },
       { status: 400 }
     );
+  }
 
   const review = await Review.create({
     product: productId,
-    user: userId, // Use Clerk userId instead of email
+    user: user.id,
     name,
+    title,
     rating,
     comment,
   });
 
-  return new Response(JSON.stringify(review), { status: 201 });
-}
-
-export async function PUT(req, { params }) {
-  await connectDB();
-  const { userId } = await auth();
-  if (!userId)
-    return new Response(JSON.stringify({ message: "Not authorized" }), {
-      status: 401,
-    });
-
-  const body = await req.json();
-  const review = await Review.findById(params.id);
-
-  if (!review)
-    return new Response(JSON.stringify({ message: "Review not found" }), {
-      status: 404,
-    });
-  if (review.user !== userId)
-    return new Response(
-      JSON.stringify({ message: "Cannot edit others' reviews" }),
-      { status: 403 }
-    );
-
-  review.rating = body.rating || review.rating;
-  review.comment = body.comment || review.comment;
-  review.name = body.name || review.name;
-
-  await review.save();
-  return new Response(JSON.stringify(review), { status: 200 });
-}
-
-export async function DELETE(req, { params }) {
-  await connectDB();
-  const { userId } = await auth();
-  if (!userId)
-    return new Response(JSON.stringify({ message: "Not authorized" }), {
-      status: 401,
-    });
-
-  const review = await Review.findById(params.id);
-  if (!review)
-    return new Response(JSON.stringify({ message: "Review not found" }), {
-      status: 404,
-    });
-  if (review.user !== userId)
-    return new Response(
-      JSON.stringify({ message: "Cannot delete others' reviews" }),
-      { status: 403 }
-    );
-
-  await review.deleteOne();
-  return new Response(JSON.stringify({ message: "Deleted" }), { status: 200 });
+  return Response.json(review.toObject(), { status: 201 });
 }
