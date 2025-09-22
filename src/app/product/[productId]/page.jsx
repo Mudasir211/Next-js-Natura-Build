@@ -37,9 +37,9 @@ export default async function ProductPage({ params }) {
               {product.onSale ? (
                 <>
                   <span className="line-through text-gray-500 mr-2">
-                    ${product.cuttedPrice}
+                    Rs.{product.cuttedPrice}
                   </span>
-                  ${product.price}
+                  RS.{product.price}
                 </>
               ) : (
                 `$${product.price}`

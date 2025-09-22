@@ -2,15 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import NavbarWrapper from "./NavbarWrapper";
 import Logo from "../assets/logo.png";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton,  } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await currentUser();
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Products", href: "/products" },
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
+
+  // ✅ If admin, show Admin Panel
+  if (user?.publicMetadata?.role === "admin") {
+    navLinks.push({ name: "Admin Panel", href: "/admin/products" });
+  }
 
   return (
     <nav className="w-full bg-white shadow-md fixed top-0 left-0 z-50">
@@ -53,7 +61,7 @@ export default function Navbar() {
           </SignedIn>
         </div>
 
-        {/* Mobile Menu (Client-side logic in NavbarWrapper) */}
+        {/* Mobile Menu */}
         <NavbarWrapper navLinks={navLinks} />
       </div>
     </nav>

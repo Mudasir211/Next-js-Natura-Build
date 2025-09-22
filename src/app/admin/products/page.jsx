@@ -10,6 +10,7 @@ export default function AdminProductsPage() {
   const { isLoaded, user } = useUser();
   const router = useRouter();
 
+
   const [products, setProducts] = useState([]);
   const [editing, setEditing] = useState(null);
   const [showForm, setShowForm] = useState(false);

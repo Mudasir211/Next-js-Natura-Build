@@ -1,10 +1,10 @@
 import { connectDB } from "@/lib/mongodb";
 import Products from "@/models/Product";
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 /**
  * GET -> public: return all, filtered, or single product (via id query)
- * POST -> admin only: create product
+ * POST -> admin only
  */
 export async function GET(req) {
   await connectDB();
@@ -43,9 +43,9 @@ export async function GET(req) {
 
 export async function POST(req) {
   await connectDB();
-  const { userId, sessionClaims } = auth();
+  const user = await currentUser();
 
-  if (!userId || sessionClaims?.metadata?.role !== "admin") {
+  if (!user || user.publicMetadata?.role !== "admin") {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
     });
