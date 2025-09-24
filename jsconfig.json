@@ -5,6 +5,8 @@
       "@/*": ["src/*"],
        "@/lib/*": ["src/app/lib/*"],
        "@/models/*": ["src/app/models/*"],
+       "@/context/*": ["src/app/context/*"],
+
        
 
 

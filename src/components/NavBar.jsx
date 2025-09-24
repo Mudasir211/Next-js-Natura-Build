@@ -4,13 +4,17 @@ import NavbarWrapper from "./NavbarWrapper";
 import Logo from "../assets/logo.png";
 import { SignedIn, SignedOut, UserButton,  } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
+import CategoriesDropdown from "./CategoriesDropdown";
 
 export default async function Navbar() {
   const user = await currentUser();
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Products", href: "/products" },
+   
+    { name: "Cart", href: "/cart" },
+    { name: "Your Orders", href: "/orders" },
+ { name: "Products", href: "/products" },
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
@@ -22,7 +26,7 @@ export default async function Navbar() {
 
   return (
     <nav className="w-full bg-white shadow-md fixed top-0 left-0 z-50">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-3 py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -36,17 +40,19 @@ export default async function Navbar() {
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-8 items-center">
+        <div className="hidden lg:flex space-x-8 items-center">
           {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-gray-700 font-medium hover:text-green-700 transition"
-            >
-              {link.name}
-            </Link>
-          ))}
-
+    <div key={link.name} className="flex items-center space-x-2">
+      <Link
+        href={link.href}
+        className="text-gray-700 font-medium hover:text-green-700 transition"
+      >
+        {link.name}
+      </Link>
+      {/* Insert CategoriesDropdown right after "Products" */}
+      {link.name === "Your Orders" && <CategoriesDropdown />}
+    </div>
+  ))}
           {/* Clerk Auth */}
           <SignedOut>
             <Link
@@ -59,6 +65,7 @@ export default async function Navbar() {
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
+           
         </div>
 
         {/* Mobile Menu */}

@@ -1,9 +1,8 @@
-// models/Order.js
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    user: { type: String, required: true }, // Clerk userId
     items: [
       {
         product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
@@ -11,26 +10,41 @@ const orderSchema = new mongoose.Schema(
         qty: Number,
         price: Number,
         image: String,
-        attributes: Object,
       },
     ],
     shippingAddress: {
-      fullName: String,
-      address: String,
-      city: String,
-      postalCode: String,
-      country: String,
-      phone: String,
+      fullName: { type: String, required: true },
+      email: { type: String, required: true },
+      phone: { type: String, required: true },
+      address: { type: String, required: true },
+
+      street: { type: String, required: true },
+      house: { type: String, required: true },
+
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      postalCode: { type: String, required: true },
+      country: { type: String, required: true },
     },
-    paymentMethod: String,
+    paymentMethod: { type: String, default: "COD" },
     itemsPrice: Number,
     shippingPrice: Number,
     taxPrice: Number,
     totalPrice: Number,
+
+    // Status lifecycle
+    status: {
+      type: String,
+      enum: ["Placed", "Shipped", "Delivered", "Cancelled"],
+      default: "Placed",
+    },
+    placedAt: { type: Date, default: Date.now },
+    shippedAt: { type: Date },
+    deliveredAt: { type: Date },
+    cancelledAt: { type: Date },
+
     isPaid: { type: Boolean, default: false },
-    paidAt: Date,
-    isDelivered: { type: Boolean, default: false },
-    deliveredAt: Date,
+    paidAt: { type: Date },
   },
   { timestamps: true }
 );

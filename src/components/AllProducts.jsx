@@ -5,7 +5,7 @@ import { Oswald } from "next/font/google";
 const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 
 // ✅ Server component fetch
-async function getBestsellers() {
+async function getAllProducts() {
    
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
     cache: "no-store", // always fresh data
@@ -19,7 +19,7 @@ async function getBestsellers() {
 }
 
 export default async function AllProducts() {
-  const products = await getBestsellers();
+  const products = await getAllProducts();
 
   return (
     <section className="py-16 bg-gradient-to-b from-green-50 to-white">
@@ -58,9 +58,7 @@ export default async function AllProducts() {
 
 
 
-                    <span className="absolute top-2 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
-                      Bestseller
-                    </span>
+                    
                   </div>
 
                   {/* Product Info */}

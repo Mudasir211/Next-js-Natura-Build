@@ -4,6 +4,8 @@ import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { Oswald,Outfit } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "react-hot-toast";
+import { CartProvider } from "./context/CartContext";
 const oswald = Oswald({
   subsets: ["latin"],
   weights: ["400", "500", "600", "700"], // pick what you need
@@ -26,6 +28,8 @@ export default function RootLayout({ children }) {
   return (
 
     <ClerkProvider>
+        <CartProvider>
+      <Toaster position="top-right" />
     <html className={`${oswald.variable} ${outfit.variable}`} lang="en">
       <body
         className={outfit.className}
@@ -35,6 +39,9 @@ export default function RootLayout({ children }) {
         {children}
         <Footer/>
       </body>
-    </html></ClerkProvider>
+    </html>
+        </CartProvider>
+    
+    </ClerkProvider>
   );
 }

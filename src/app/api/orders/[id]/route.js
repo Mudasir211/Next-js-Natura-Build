@@ -1,62 +1,75 @@
-// app/api/orders/[id]/route.js
+import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
-import { getUserFromRequest } from "@/lib/auth";
+import { currentUser } from "@clerk/nextjs/server";
+import { sendMail } from "@/lib/mailer";
+import { statusUpdateTemplate } from "@/lib/emailTemplates";
 
 export async function GET(req, { params }) {
-  await connectDB();
-  const user = await getUserFromRequest(req);
-  if (!user)
-    return new Response(JSON.stringify({ message: "Not authorized" }), {
-      status: 401,
-    });
+  try {
+    await connectDB();
+    const user = await currentUser();
+    if (!user)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  const order = await Order.findById(params.id);
-  if (!order)
-    return new Response(JSON.stringify({ message: "Not found" }), {
-      status: 404,
-    });
+    const order = await Order.findById(params.id);
+    if (!order)
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
-  // allow owner or admin
-  if (!order.user.equals(user._id) && !user.isAdmin) {
-    return new Response(JSON.stringify({ message: "Forbidden" }), {
-      status: 403,
-    });
+    if (order.user !== user.id && user.publicMetadata?.role !== "admin") {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+
+    return NextResponse.json(order);
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { message: "Failed to fetch order" },
+      { status: 500 }
+    );
   }
-  return new Response(JSON.stringify(order), { status: 200 });
 }
 
 export async function PUT(req, { params }) {
-  await connectDB();
-  const user = await getUserFromRequest(req);
-  if (!user)
-    return new Response(JSON.stringify({ message: "Not authorized" }), {
-      status: 401,
-    });
+  try {
+    await connectDB();
+    const user = await currentUser();
+    if (!user)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  const body = await req.json();
-  const order = await Order.findById(params.id);
-  if (!order)
-    return new Response(JSON.stringify({ message: "Not found" }), {
-      status: 404,
-    });
+    const body = await req.json();
+    const order = await Order.findById(params.id);
+    if (!order)
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
-  // Only admin can mark paid/delivered OR owner can mark paid if payment confirmation
-  if (body.action === "markPaid") {
-    order.isPaid = true;
-    order.paidAt = new Date();
+    // Only admin can update status
+    if (body.status && user.publicMetadata?.role === "admin") {
+      order.status = body.status;
+
+      if (body.status === "Shipped") order.shippedAt = new Date();
+      if (body.status === "Delivered") order.deliveredAt = new Date();
+      if (body.status === "Cancelled") order.cancelledAt = new Date();
+
+      // --- EMAIL user about status update ---
+      await sendMail({
+        to: order.shippingAddress.email,
+        subject: `Your Natura Order ${order._id} is now ${body.status}`,
+        html: statusUpdateTemplate(order, body.status),
+      });
+    }
+
+    if (body.action === "markPaid") {
+      order.isPaid = true;
+      order.paidAt = new Date();
+    }
+
     await order.save();
-    return new Response(JSON.stringify(order), { status: 200 });
+    return NextResponse.json(order);
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { message: "Failed to update order" },
+      { status: 500 }
+    );
   }
-
-  if (body.action === "markDelivered" && user.isAdmin) {
-    order.isDelivered = true;
-    order.deliveredAt = new Date();
-    await order.save();
-    return new Response(JSON.stringify(order), { status: 200 });
-  }
-
-  return new Response(JSON.stringify({ message: "No action performed" }), {
-    status: 400,
-  });
 }

@@ -1,77 +1,85 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Marquee from "react-fast-marquee";
-
-import Hair from "../assets/Hair.png";
-import Powders from "../assets/Powders.png";
-import Energy from "../assets/Energy.png";
-import Weight from "../assets/Weight.png";
-import Formulaes from "../assets/Formulaes.png";
-import Honey from "../assets/Honey.png";
-import Spices from "../assets/Spices.png";
+import { motion } from "framer-motion";
 import { Oswald } from "next/font/google";
 
 const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 
 function Categories() {
-  const categories = [
-    { name: "Herbal Growth & Scalp Herbs", img: Hair, href: "/products?category=oils" },
-    { name: "Herbal Powder & Superfood Seeds", img: Powders, href: "/products?category=bestsellers" },
-    { name: "Herbal Weight Loss Solution", img: Energy, href: "/products?category=powders" },
-    { name: "Natural Energy & Stamina Boosters", img: Weight, href: "/products?category=supplements" },
-    { name: "Pure Spices", img: Formulaes, href: "/products?category=spices" },
-    { name: "Vision & Eyesight Support", img: Honey, href: "/products?category=bestsellers" },
-    { name: "Skin Body And Detox Herbs", img: Spices, href: "/products?category=bestsellers" },
-  ];
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const doubled = [...categories, ...categories, ...categories];
 
   return (
-    <section className="py-12 bg-gradient-to-b from-green-50 via-white to-green-50">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <section className="relative pt-16 bg-gradient-to-br from-green-50 via-emerald-100 to-green-200 overflow-hidden">
+      {/* subtle overlay pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.6)_1px,transparent_1px)] bg-[length:20px_20px] opacity-40 -z-10"></div>
+
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Heading */}
         <div className="text-center px-4">
           <h2
-            className={`text-2xl md:text-4xl font-bold mb-7 inline-block relative ${oswald.className} -skew-x-10 bg-gradient-to-r from-green-700 via-emerald-500 to-green-400 text-transparent bg-clip-text`}
+            className={`text-2xl md:text-4xl font-bold mb-4 inline-block relative ${oswald.className} -skew-x-10 bg-gradient-to-r from-green-700 via-emerald-500 to-green-400 text-transparent bg-clip-text`}
           >
             Browse Our Categories
           </h2>
 
-          {/* Description */}
-          <p className="mt-4 font-bold text-gray-600 max-w-lg mx-auto px-3 text-sm sm:text-base leading-relaxed">
-            Explore our natural wellness range – from{" "}
-            <span className="text-green-700 font-medium">hair care</span> to{" "}
-            <span className="text-green-700 font-medium">superfoods, vitality boosters</span>, and{" "}
-            <span className="text-green-700 font-medium">pure spices</span>. Every category is crafted to
+          <p className="mt-3 font-semibold text-gray-600 max-w-lg mx-auto px-3 text-sm sm:text-base leading-relaxed">
+            Explore our natural wellness range – carefully curated categories to
             support your health journey.
           </p>
         </div>
 
-        {/* Marquee */}
-        <div className="px-6 overflow-y-hidden md:px-16">
-          <Marquee gradient={false} speed={40} pauseOnHover>
-            {[...categories, ...categories].map((cat, index) => (
-              <Link
-                key={index}
-                href={cat.href}
-                className="relative group flex flex-col w-[160px] h-[120px] sm:w-[160px] sm:h-[170px] md:w-[200px] md:h-[190px] mx-2 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 transform hover:scale-105"
-              >
-                {/* Background Image */}
-                <Image
-                  src={cat.img}
-                  alt={cat.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-
-                {/* Gradient Overlay */}
-               
-
-                {/* Category Name */}
-              
-              </Link>
-            ))}
-          </Marquee>
+        {/* Loader or Content */}
+        <div className="relative mx-3 overflow-x-scroll scrollbar-hide min-h-[220px] flex items-center justify-center">
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <motion.div
+              className="flex gap-5 px-8 w-max py-6 rounded-2xl backdrop-blur-md border border-green-100 shadow-[0_8px_30px_rgb(0,0,0,0.05)]"
+              animate={{ x: ["0%", "-33.33%"] }}
+              transition={{
+                repeat: Infinity,
+                duration: 30,
+                ease: "linear",
+              }}
+            >
+              {doubled.map((cat, index) => (
+                <Link
+                  key={index}
+                  href={`/products?category=${cat.slug}`}
+                  className="relative group flex flex-col bg-white/60 w-[180px] h-[150px] sm:w-[180px] sm:h-[190px] md:w-[220px] md:h-[210px] rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 transform hover:scale-105"
+                >
+                  <Image
+                    src={cat.image}
+                    alt={cat.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </Link>
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
     </section>

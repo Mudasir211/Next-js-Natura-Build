@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductImageUpload from "./ProductImageUpload";
 import { Leaf } from "lucide-react";
 
@@ -19,6 +19,7 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
     initialData?.discountPercentage || 0
   );
   const [category, setCategory] = useState(initialData?.category || "");
+  const [categories, setCategories] = useState([]); // fetched categories
   const [size, setSize] = useState(initialData?.size || "");
   const [ingredients, setIngredients] = useState(
     initialData?.ingredients?.join(", ") || ""
@@ -29,6 +30,20 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
   );
   const [onSale, setOnSale] = useState(initialData?.onSale || false);
   const [images, setImages] = useState(initialData?.images || []);
+
+  // fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to fetch categories", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,7 +66,6 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
       images,
     });
 
-    // reset only if creating new
     if (!initialData) {
       setTitle("");
       setShortDescription("");
@@ -167,13 +181,18 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
           <label className="block text-sm font-medium text-green-800 mb-1">
             Category
           </label>
-          <input
-            type="text"
-            placeholder="Category"
+          <select
             className="border border-green-300 focus:border-green-500 focus:ring-green-200 w-full p-3 rounded-lg shadow-sm"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-          />
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat._id} value={cat.slug}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-sm font-medium text-green-800 mb-1">

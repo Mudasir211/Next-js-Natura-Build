@@ -4,7 +4,9 @@ import Category from "@/models/Category";
 
 export async function GET() {
   await connectDB();
-  const cats = await Category.find({}).sort({ name: 1 });
+  const cats = await Category.find({}).sort({
+    createdAt: 1,
+  });
   return new Response(JSON.stringify(cats), { status: 200 });
 }
 

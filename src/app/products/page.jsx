@@ -1,152 +1,111 @@
-"use client";
-
-import { useState } from "react";
-import { Filter, ArrowUpDown } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import ProductFilters from "@/components/ProductFilters";
+import SortDropdown from "@/components/SortDropdown";
+import ProductSearch from "@/components/ProductSearch";
 
-const products = [
-  { id: 1, name: "Natura Hair Oil", price: 19.99, img: "/products/oil.png" },
-  { id: 2, name: "Organic Amla Powder", price: 12.99, img: "/products/amla.png" },
-  { id: 3, name: "Herbal Green Tea", price: 9.99, img: "/products/tea.png" },
-  { id: 4, name: "Black Seed Capsules", price: 15.99, img: "/products/capsules.png" },
-  { id: 5, name: "Neem Face Pack", price: 11.49, img: "/products/neem.png" },
-  { id: 6, name: "Tulsi Immunity Drops", price: 14.99, img: "/products/tulsi.png" },
-  { id: 7, name: "Herbal Shampoo", price: 18.99, img: "/products/shampoo.png" },
-  { id: 8, name: "Ashwagandha Powder", price: 16.49, img: "/products/ashwagandha.png" },
-];
+async function fetchProducts({ search, categories, sort, bestseller }) {
+  const params = new URLSearchParams();
+  if (search) params.append("search", search);
+  if (categories?.length) params.append("category", categories.join(","));
+  if (sort) params.append("sort", sort);
+  if (bestseller) params.append("bestseller", "true");
 
-export default function ProductsPage() {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products?${params.toString()}`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch products");
+  return res.json();
+}
+
+async function fetchCategories() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch categories");
+  return res.json();
+}
+
+export default async function ProductsPage({ searchParams }) {
+  const search = searchParams?.search || "";
+  const categoryParam = searchParams?.category || "";
+  const categoriesSelected = categoryParam ? categoryParam.split(",") : [];
+  const sort = searchParams?.sort || "";
+  const bestseller = searchParams?.bestseller === "true";
+
+  const [products, categories] = await Promise.all([
+    fetchProducts({ search, categories: categoriesSelected, sort, bestseller }),
+    fetchCategories(),
+  ]);
+
+  // Hero logic
+  let heroTitle = "Our Products";
+  let heroDescription = "Explore Natura’s premium herbal collection, crafted with natural ingredients for a healthy lifestyle.";
+
+  if (bestseller) {
+    heroTitle = "Bestsellers";
+    heroDescription = "Check out our top-selling products loved by our customers!";
+  } else if (categoriesSelected.length > 0) {
+    const currentCategory = categories.find((cat) => cat.slug === categoriesSelected[0]);
+    if (currentCategory) {
+      heroTitle = currentCategory.name;
+      heroDescription = currentCategory.description || `Explore our ${currentCategory.name} collection, crafted with natural ingredients for a healthy lifestyle.`;
+    }
+  } else if (search) {
+    heroTitle = `Search results for "${search}"`;
+    heroDescription = `Products matching your search query.`;
+  }
 
   return (
-    <section className="bg-gray-50 text-gray-800">
+    <section className="bg-gray-50 py-14 text-gray-800">
       {/* Hero */}
       <div className="bg-[#016630] text-white py-16 px-6 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold">Our Products</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg opacity-90">
-          Explore Natura’s premium herbal collection, crafted with natural ingredients for a healthy lifestyle.
-        </p>
+        <h1 className="text-4xl md:text-5xl font-bold">{heroTitle}</h1>
+        <p className="mt-4 max-w-2xl mx-auto text-lg opacity-90">{heroDescription}</p>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-4 gap-10">
-        {/* Sidebar Filters */}
-        <aside className="hidden lg:block bg-white p-6 rounded-2xl shadow-md space-y-8">
-          <h2 className="flex items-center gap-2 text-xl font-semibold text-[#016630]">
-            <Filter className="w-5 h-5" /> Filters
-          </h2>
+      <div className="max-w-7xl mx-auto px-6 mt-10 flex flex-col lg:flex-row gap-10">
+        {/* Filters */}
+        <ProductFilters categories={categories} selectedCategories={categoriesSelected} />
 
-          {/* Categories */}
-          <div>
-            <h3 className="font-semibold mb-3">Categories</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li><input type="checkbox" className="mr-2" /> Hair Care</li>
-              <li><input type="checkbox" className="mr-2" /> Skin Care</li>
-              <li><input type="checkbox" className="mr-2" /> Herbal Powders</li>
-              <li><input type="checkbox" className="mr-2" /> Supplements</li>
-              <li><input type="checkbox" className="mr-2" /> Beverages</li>
-            </ul>
-          </div>
-
-          {/* Price Range */}
-          <div>
-            <h3 className="font-semibold mb-3">Price Range</h3>
-            <input type="range" min="0" max="50" className="w-full" />
-            <p className="text-sm text-gray-500 mt-2">Up to $50</p>
-          </div>
-        </aside>
-
-        {/* Product Grid Section */}
-        <div className="lg:col-span-3">
-          {/* Sort Options */}
-          <div className="flex justify-between items-center mb-6">
-            {/* Mobile Filter Button */}
-            <button
-              className="lg:hidden flex items-center gap-2 px-4 py-2 border rounded-lg text-sm font-medium"
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-            >
-              <Filter className="w-4 h-4" /> Filters
-            </button>
-
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-2">
-              <ArrowUpDown className="w-4 h-4 text-gray-600" />
-              <select className="border px-3 py-2 rounded-lg text-sm focus:outline-none">
-                <option>Sort by</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Newest</option>
-                <option>Best Selling</option>
-              </select>
-            </div>
-          </div>
+        {/* Products Column */}
+        <div className="flex-1">
+             <ProductSearch />
+          {/* Sort Dropdown */}
+          <SortDropdown />
 
           {/* Product Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6">
-            {products.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white p-4 rounded-2xl shadow-md hover:shadow-lg transition cursor-pointer group"
-              >
-                <div className="overflow-hidden rounded-lg">
-                  <Image
-                    src={item.img}
-                    alt={item.name}
-                    width={300}
-                    height={300}
-                    className="object-contain transition-transform duration-300 group-hover:scale-105 mx-auto"
-                  />
-                </div>
-                <div className="mt-4 text-center">
-                  <h3 className="font-semibold text-gray-800">{item.name}</h3>
-                  <p className="text-[#016630] font-bold mt-1">${item.price}</p>
-                  <button className="mt-3 w-full bg-[#016630] text-white py-2 rounded-lg hover:bg-green-700 transition">
-                    View Product
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-10">
+            {products.length > 0 ? (
+              products.map((item) => (
+                <Link key={item._id} href={`/product/${item._id}`}>
+                  <div className="relative flex flex-col items-center gap-3 text-sm cursor-pointer group rounded-xl p-2 bg-white shadow-sm hover:shadow-lg transition duration-300 border border-green-100">
+                    {item.bestseller && <span className="absolute top-2 left-2 z-40 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">Bestseller</span>}
+
+                    <div className="relative z-0 w-full h-48 sm:h-auto overflow-hidden rounded-lg">
+                      <div className="w-full h-48 lg:h-60 md:h-50 flex items-center justify-center bg-white rounded-lg overflow-hidden">
+                        <img src={item.images[0]} alt={item.title} className="h-full w-full object-contain sm:object-contain transition-transform duration-500 group-hover:scale-105" />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1 text-left">
+                      <p className="font-medium text-green-900 group-hover:text-green-700">{item.title}</p>
+                      {item.onSale ? (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-gray-500 line-through text-xs">Rs {item.cuttedPrice}</span>
+                          <span className="font-bold text-xs text-green-700">Rs {item.price}</span>
+                          <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">-{item.discountPercentage}%</span>
+                        </div>
+                      ) : (
+                        <p className="font-bold text-green-700">Rs {item.price}</p>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p className="col-span-full text-gray-500">No products found.</p>
+            )}
           </div>
         </div>
       </div>
-
-      {/* Mobile Filters Drawer */}
-      {isFilterOpen && (
-        <div className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex">
-          <div className="w-3/4 bg-white p-6 overflow-y-auto">
-            <h2 className="flex items-center gap-2 text-xl font-semibold text-[#016630] mb-6">
-              <Filter className="w-5 h-5" /> Filters
-            </h2>
-            <div className="space-y-6">
-              {/* Categories */}
-              <div>
-                <h3 className="font-semibold mb-3">Categories</h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li><input type="checkbox" className="mr-2" /> Hair Care</li>
-                  <li><input type="checkbox" className="mr-2" /> Skin Care</li>
-                  <li><input type="checkbox" className="mr-2" /> Herbal Powders</li>
-                  <li><input type="checkbox" className="mr-2" /> Supplements</li>
-                  <li><input type="checkbox" className="mr-2" /> Beverages</li>
-                </ul>
-              </div>
-
-              {/* Price Range */}
-              <div>
-                <h3 className="font-semibold mb-3">Price Range</h3>
-                <input type="range" min="0" max="50" className="w-full" />
-                <p className="text-sm text-gray-500 mt-2">Up to $50</p>
-              </div>
-            </div>
-
-            <button
-              className="mt-6 w-full bg-[#016630] text-white py-3 rounded-lg hover:bg-green-700 transition"
-              onClick={() => setIsFilterOpen(false)}
-            >
-              Apply Filters
-            </button>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

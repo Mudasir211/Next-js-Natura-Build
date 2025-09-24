@@ -16,7 +16,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#08af56] border-gray-400 border-t text-white">
+    <footer className="bg-[#3baa6f] border-gray-400 border-t text-white">
       {/* Logo */}
       <div className="flex items-center md:justify-start md:px-6 justify-center p-6 bg-white">
         <Image alt="Natura Logo" src={Logo} width={110} height={110} />
@@ -46,8 +46,8 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <Phone className="w-5 h-5" />
-              <a href="tel:+923057126897" className="hover:text-green-300">
-                +92 305 7126897
+              <a href="tel:+923281598664" className="hover:text-green-300">
+                +92 328 1598664
               </a>
             </li>
             <li className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5" />
               <a
-                href="https://wa.me/923057126897"
+                href="https://wa.me/+923281598664"
                 target="_blank"
                 className="hover:text-green-300"
               >
@@ -79,7 +79,7 @@ export default function Footer() {
           </h2>
           <ul className="space-y-3 text-base">
             <li>
-              <Link href="/pages/contact" className="hover:text-green-300">
+              <Link href="/contact" className="hover:text-green-300">
                 Contact
               </Link>
             </li>
@@ -128,11 +128,7 @@ export default function Footer() {
                 Our Mission
               </Link>
             </li>
-            <li>
-              <Link href="/pages/map" className="hover:text-green-300">
-                Location Map
-              </Link>
-            </li>
+           
           </ul>
         </div>
 
@@ -144,19 +140,7 @@ export default function Footer() {
           <p className="text-base mb-4 opacity-90">
             Stay updated with exclusive offers, new arrivals, and insider-only deals!
           </p>
-          <form className="flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              placeholder="Enter your Email Address"
-              className="w-full px-4 py-2 rounded-md text-black text-base bg-white border focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-md text-base font-medium"
-            >
-              Submit
-            </button>
-          </form>
+         
         </div>
       </div>
 

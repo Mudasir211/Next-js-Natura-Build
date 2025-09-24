@@ -58,7 +58,7 @@ export default function ContactPage() {
           {/* Quick actions */}
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href="https://wa.me/923057126897"
+              href="https://wa.me/+923281598664"
               target="_blank"
               className="inline-flex items-center gap-2 rounded-full bg-white text-green-700 px-5 py-2 font-medium shadow hover:shadow-md transition"
             >
@@ -66,11 +66,11 @@ export default function ContactPage() {
               WhatsApp Us
             </a>
             <a
-              href="tel:+923057126897"
+              href="tel:+923281598664"
               className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-5 py-2 font-medium shadow hover:bg-white/15 transition"
             >
               <Phone className="w-5 h-5" />
-              Call: +92 305 7126897
+              Call: +92 328 1598664
             </a>
             <a
               href="mailto:natura.pk1999@gmail.com"
@@ -98,7 +98,7 @@ export default function ContactPage() {
               href="tel:+923057126897"
               className="mt-3 inline-block text-green-700 font-medium hover:underline"
             >
-              +92 305 7126897
+              +92 328 1598664
             </a>
           </div>
 
@@ -198,7 +198,7 @@ export default function ContactPage() {
                   Send Message
                 </button>
                 <a
-                  href="https://wa.me/923057126897"
+                  href="https://wa.me/+923281598664"
                   target="_blank"
                   className="inline-flex items-center gap-2 rounded-lg border border-green-700 text-green-700 px-6 py-3 font-semibold hover:bg-green-50 transition"
                 >
@@ -214,7 +214,7 @@ export default function ContactPage() {
             <div className="rounded-2xl bg-white shadow-sm p-6 md:p-8">
               <h2 className="text-2xl font-bold text-green-800">Visit Us</h2>
               <p className="mt-2 text-gray-600">
-                Meer Muktar Road, Bhalwal, District Sargodha
+                Bhalwal, District Sargodha
               </p>
 
               <div className="mt-4 flex flex-col gap-2 text-gray-700">
@@ -227,11 +227,11 @@ export default function ContactPage() {
                   Open in Google Maps
                 </a>
                 <a
-                  href="tel:+923057126897"
+                  href="tel:+923281598664"
                   className="inline-flex items-center gap-2 hover:text-green-700"
                 >
                   <Phone className="w-5 h-5" />
-                  +92 305 7126897
+                  +92 328 1598664
                 </a>
                 <a
                   href="mailto:natura.pk1999@gmail.com"
@@ -304,8 +304,8 @@ export default function ContactPage() {
                 a: "Yes, we ship across Pakistan. Standard delivery is 2–5 business days depending on location.",
               },
               {
-                q: "I have sensitive skin. Are your products safe?",
-                a: "Our formulations are generally gentle; however, we recommend a patch test first and checking ingredients for allergies.",
+                q: "Are your products safe to use?",
+                a: "Our products are Organic and 100% natural so they are totally safe to use. ",
               },
             ].map((item, idx) => (
               <details
@@ -344,11 +344,11 @@ export default function ContactPage() {
             "@type": "Store",
             name: "Natura",
             image: "https://your-domain.com/logo.jpg",
-            telephone: "+92 305 7126897",
+            telephone: "+92 328 1598664",
             email: "natura.pk1999@gmail.com",
             address: {
               "@type": "PostalAddress",
-              streetAddress: "Meer Muktar Road",
+              streetAddress: "",
               addressLocality: "Bhalwal",
               addressRegion: "Sargodha",
               addressCountry: "PK",

@@ -1,19 +1,17 @@
 import { connectDB } from "@/lib/mongodb";
 import Products from "@/models/Product";
+import Categories from "@/models/Category";
 import { currentUser } from "@clerk/nextjs/server";
 
-/**
- * GET -> public: return all, filtered, or single product (via id query)
- * POST -> admin only
- */
 export async function GET(req) {
   await connectDB();
 
   const url = new URL(req.url);
   const id = url.searchParams.get("id");
   const search = url.searchParams.get("search") || "";
-  const category = url.searchParams.get("category");
+  const categorySlug = url.searchParams.get("category");
   const bestseller = url.searchParams.get("bestseller");
+  const sort = url.searchParams.get("sort");
   const limit = Number(url.searchParams.get("limit") || 50);
 
   try {
@@ -28,11 +26,31 @@ export async function GET(req) {
     }
 
     const filter = {};
+
+    // Search by title
     if (search) filter.title = { $regex: search, $options: "i" };
-    if (category) filter.category = category;
+
+    // Filter by category
+    if (categorySlug) {
+      const categoryDoc = await Categories.findOne({
+        slug: categorySlug,
+      }).lean();
+      if (categoryDoc) filter.category = categoryDoc.name;
+      else return new Response(JSON.stringify([]), { status: 200 });
+    }
+
+    // Filter by bestseller
     if (bestseller === "true") filter.bestseller = true;
 
-    const products = await Products.find(filter).limit(limit).lean();
+    let query = Products.find(filter).limit(limit);
+
+    // Sorting
+    if (sort === "low") query = query.sort({ price: 1 });
+    else if (sort === "high") query = query.sort({ price: -1 });
+    else if (sort === "new") query = query.sort({ createdAt: -1 });
+    else if (sort === "best") query = query.sort({ sold: -1 });
+
+    const products = await query.lean();
     return new Response(JSON.stringify(products), { status: 200 });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
@@ -54,7 +72,6 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const product = await Products.create(body);
-
     return new Response(JSON.stringify(product), { status: 201 });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {

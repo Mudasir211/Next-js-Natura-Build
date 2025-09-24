@@ -65,7 +65,7 @@ export default function AdminProductsPage() {
   if (!authorized) return <p className="mt-16 text-center">Checking access…</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br mt-16 from-green-50 via-white to-green-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br mt-16 from-green-50 via-white to-green-100 px-4 py-8 sm:p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -87,7 +87,7 @@ export default function AdminProductsPage() {
 
         {/* Product Form */}
         {showForm && (
-          <div className="bg-white rounded-2xl shadow-xl p-6 border border-green-100 animate-fadeIn">
+          <div className="bg-white rounded-2xl shadow-xl sm:p-6 border border-green-100 animate-fadeIn">
             <ProductForm
               onSubmit={handleSave}
               initialData={editing}
@@ -100,7 +100,7 @@ export default function AdminProductsPage() {
         )}
 
         {/* Product Table */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-green-100 animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-xl sm:p-6 border border-green-100 animate-fadeIn">
           <ProductTable
             products={products}
             onEdit={(p) => {

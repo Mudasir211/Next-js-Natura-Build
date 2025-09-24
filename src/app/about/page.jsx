@@ -5,7 +5,7 @@ import Logo from "../../assets/logo.png"; // adjust path if needed
 
 export default function AboutPage() {
   return (
-    <div className="bg-gray-50 text-gray-800">
+    <div className="bg-gray-50 py-14 text-gray-800">
       {/* Hero Section */}
       <section className="relative bg-green-700 text-white py-20">
         <div className="absolute inset-0">

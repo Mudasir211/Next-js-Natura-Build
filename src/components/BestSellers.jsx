@@ -21,7 +21,7 @@ export default async function BestSellersComponent() {
   const products = await getBestsellers();
 
   return (
-    <section className="py-16 bg-gradient-to-b from-green-50 to-white">
+    <section className="py-10 bg-gradient-to-b from-green-50 to-white">
       <div className="max-w-7xl mx-auto px-6 text-center space-y-10">
         {/* Section Title */}
         <h2

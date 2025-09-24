@@ -1,8 +1,10 @@
 import AverageStars from "@/components/AverageStars";
 import ProductTabs from "@/components/ProductTabs";
 import ProductGallery from "@/components/ProductGallery";
-import { Leaf, Globe, ShieldCheck } from "lucide-react"; // icons
 import ProductReviews from "@/components/ProductReviews";
+import AddToCartButton from "@/components/AddToCartButton";
+import { Leaf, Globe, ShieldCheck } from "lucide-react";
+import BuyNowButton from "@/components/BuyNowButton";
 
 async function getProduct(id) {
   const res = await fetch(
@@ -12,6 +14,7 @@ async function getProduct(id) {
   if (!res.ok) throw new Error("Failed to fetch product");
   return res.json();
 }
+
 async function getReviews(productId) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews?product=${productId}`,
@@ -20,10 +23,6 @@ async function getReviews(productId) {
   if (!res.ok) throw new Error("Failed to fetch reviews");
   return res.json();
 }
-
-
-
-
 
 export default async function ProductPage({ params }) {
   const { productId } = params;
@@ -38,7 +37,7 @@ export default async function ProductPage({ params }) {
   return (
     <div className="mt-5 px-4 sm:px-8 py-14 outfit bg-green-50">
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* ✅ Image Gallery */}
+        {/* Image Gallery */}
         <div className="flex-1">
           <ProductGallery images={product.images} title={product.title} />
         </div>
@@ -58,7 +57,10 @@ export default async function ProductPage({ params }) {
                   <span className="line-through text-gray-500 mr-2">
                     Rs.{product.cuttedPrice}
                   </span>
-                  Rs.{product.price}
+                  Rs.{product.price}{" "}
+                  <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
+                    -{product.discountPercentage}%
+                  </span>
                 </>
               ) : (
                 `Rs.${product.price}`
@@ -76,16 +78,15 @@ export default async function ProductPage({ params }) {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex-1 py-3 text-white bg-green-700 rounded-lg shadow hover:bg-green-800 transition">
-                ADD TO CART
-              </button>
-              <button className="flex-1 py-3 text-white bg-yellow-400 rounded-lg shadow hover:bg-yellow-500 transition">
-                BUY NOW
-              </button>
+              {/* Client component for Add to Cart */}
+              <AddToCartButton product={product} />
+
+             <BuyNowButton product={product} qty={1} />
+
             </div>
 
             {/* Trust Badges */}
-            <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mt-6 text-green-800">
+            <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mt-8 text-green-800">
               <div className="flex flex-col items-center gap-2">
                 <Leaf className="w-8 h-8" />
                 <span className="font-bold text-xs sm:text-lg">100% Ayurvedic</span>

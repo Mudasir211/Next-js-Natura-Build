@@ -1,62 +1,105 @@
-// app/api/orders/route.js
+import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import Cart from "@/models/Cart";
-import { getUserFromRequest } from "@/lib/auth";
-import sendEmail from "@/lib/sendEmail";
+import { currentUser } from "@clerk/nextjs/server";
+import { sendMail } from "@/lib/mailer";
+import {
+  adminOrderNotificationTemplate,
+  orderPlacedTemplate,
+} from "@/lib/emailTemplates";
 
+// GET - fetch user orders (or all if admin)
 export async function GET(req) {
-  await connectDB();
-  const user = await getUserFromRequest(req);
-  if (!user)
-    return new Response(JSON.stringify({ message: "Not authorized" }), {
-      status: 401,
-    });
+  try {
+    await connectDB();
+    const user = await currentUser();
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
-  // if admin query param ?admin=true then return all orders
-  const url = new URL(req.url);
-  const admin = url.searchParams.get("admin") === "true";
-  if (admin && user.isAdmin) {
-    const all = await Order.find({})
-      .sort({ createdAt: -1 })
-      .populate("user", "name email");
-    return new Response(JSON.stringify(all), { status: 200 });
+    const { searchParams } = new URL(req.url);
+    const isAdmin = searchParams.get("admin") === "true";
+
+    if (isAdmin && user.publicMetadata?.role === "admin") {
+      const allOrders = await Order.find({}).sort({ createdAt: -1 });
+      return NextResponse.json(allOrders);
+    }
+
+    const orders = await Order.find({ user: user.id }).sort({ createdAt: -1 });
+    return NextResponse.json(orders);
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { message: "Failed to fetch orders" },
+      { status: 500 }
+    );
   }
-  const orders = await Order.find({ user: user._id }).sort({ createdAt: -1 });
-  return new Response(JSON.stringify(orders), { status: 200 });
 }
 
+// POST - create order
 export async function POST(req) {
-  await connectDB();
-  const user = await getUserFromRequest(req);
-  if (!user)
-    return new Response(JSON.stringify({ message: "Not authorized" }), {
-      status: 401,
+  try {
+    await connectDB();
+    const user = await currentUser();
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const {
+      items,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
+    } = body;
+
+    if (!items || items.length === 0) {
+      return NextResponse.json(
+        { message: "No items in order" },
+        { status: 400 }
+      );
+    }
+
+    const order = await Order.create({
+      user: user.id,
+
+      items,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
     });
 
-  const body = await req.json();
-  // expect body: items, shippingAddress, paymentMethod, prices
-  const order = await Order.create({
-    user: user._id,
-    items: body.items,
-    shippingAddress: body.shippingAddress,
-    paymentMethod: body.paymentMethod,
-    itemsPrice: body.itemsPrice,
-    shippingPrice: body.shippingPrice,
-    taxPrice: body.taxPrice,
-    totalPrice: body.totalPrice,
-  });
+    // clear user cart
+    await Cart.deleteOne({ user: user.id });
 
-  // clear cart
-  await Cart.deleteOne({ user: user._id });
+    // --- EMAILS ---
+    // 1. Admin notification
+    await sendMail({
+      to: process.env.ADMIN_EMAIL,
+      subject: `New Order Placed - ${order._id}`,
+      html: adminOrderNotificationTemplate(order),
+    });
 
-  // send confirmation email (best-effort)
-  sendEmail({
-    to: user.email,
-    subject: `Order confirmation - ${order._id}`,
-    text: `Thanks for your order! Order ID: ${order._id}`,
-    html: `<p>Thanks for your order! Order ID: <strong>${order._id}</strong></p>`,
-  }).catch(() => {});
+    // 2. User confirmation
+    await sendMail({
+      to: order.shippingAddress.email,
+      subject: `Your Natura Order ${order._id} has been placed`,
+      html: orderPlacedTemplate(order),
+    });
 
-  return new Response(JSON.stringify(order), { status: 201 });
+    return NextResponse.json(order, { status: 201 });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { message: "Failed to place order" },
+      { status: 500 }
+    );
+  }
 }
