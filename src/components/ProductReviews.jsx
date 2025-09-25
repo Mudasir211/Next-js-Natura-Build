@@ -139,7 +139,7 @@ export default function ProductReviews({ productId }) {
           <h3 className="text-xl font-semibold mb-4 text-green-700">
             {editingId ? "Edit Your Review" : "Write a Review"}
           </h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 z-50">
             <input
               type="text"
               placeholder="Your display name"

@@ -15,23 +15,58 @@ import {
   Send,
 } from "lucide-react";
 import Logo from "../../assets/logo.png";
+import ContactForm from "@/components/ContactForm";
 
 // Optional: SEO metadata (App Router)
+// ✅ app/contact/page.jsx
+
+// ✅ app/contact/page.jsx
+
+// ✅ app/about/page.jsx
+
 export const metadata = {
-  title: "Contact | Natura — Herbal, Organic & Wellness Products",
+  title: "Contact Natura.pk | Herbal, Organic & Natural Wellness Products",
   description:
-    "Get in touch with Natura. Questions about herbal oils, powders, supplements or skincare? Call, email, WhatsApp, or visit us in Bhalwal, Sargodha.",
+    "Discover Natura.pk, your trusted source for herbal, organic, and natural wellness products. Learn about our mission, vision, and commitment to a healthier lifestyle.",
+  keywords: [
+    "About Natura.pk",
+    "Herbal products Pakistan",
+    "Organic skincare",
+    "Ayurvedic remedies",
+    "Herbal oils",
+    "Natural supplements",
+    "Wellness products Pakistan",
+  ],
   openGraph: {
-    title: "Contact Natura",
+    title: "About Natura.pk",
     description:
-      "Reach Natura for product inquiries, orders, and support. We’re here 10am–8pm (Sun closed).",
-    url: "https://your-domain.com/contact",
-    siteName: "Natura",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Natura" }],
+      "Learn about Natura.pk’s mission and vision — providing natural, herbal, and organic products for a healthier lifestyle.",
+    url: "https://naturapk.store/about",
+    siteName: "Natura.pk",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png", // ✅ your Cloudinary logo
+        width: 800,
+        height: 800,
+        alt: "Natura.pk Logo",
+      },
+    ],
     locale: "en_PK",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Natura.pk | Herbal, Organic & Wellness",
+    description:
+      "Natura.pk is Pakistan’s trusted partner for herbal, organic, and wellness products. Learn more about our values and mission.",
+    images: [
+      "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png",
+    ],
+  },
 };
+
+
+
 
 export default function ContactPage() {
   return (
@@ -137,76 +172,7 @@ export default function ContactPage() {
               Fill out the form and our support team will get back to you.
             </p>
 
-            <form className="mt-6 space-y-4">
-              <div className="relative">
-                <label htmlFor="name" className="sr-only">
-                  Full Name
-                </label>
-                <User className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
-                <input
-                  id="name"
-                  type="text"
-                  placeholder="Full Name"
-                  className="w-full rounded-lg border bg-white px-10 py-3 outline-none focus:ring-2 focus:ring-green-600"
-                />
-              </div>
-
-              <div className="relative">
-                <label htmlFor="email" className="sr-only">
-                  Email
-                </label>
-                <AtSign className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="Email Address"
-                  className="w-full rounded-lg border bg-white px-10 py-3 outline-none focus:ring-2 focus:ring-green-600"
-                />
-              </div>
-
-              <div className="relative">
-                <label htmlFor="subject" className="sr-only">
-                  Subject
-                </label>
-                <FileText className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
-                <input
-                  id="subject"
-                  type="text"
-                  placeholder="Subject (e.g., Order, Product Inquiry)"
-                  className="w-full rounded-lg border bg-white px-10 py-3 outline-none focus:ring-2 focus:ring-green-600"
-                />
-              </div>
-
-              <div className="relative">
-                <label htmlFor="message" className="sr-only">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  placeholder="Write your message..."
-                  className="w-full rounded-lg border bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-green-600"
-                />
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 rounded-lg bg-green-700 text-white px-6 py-3 font-semibold hover:bg-green-800 transition"
-                >
-                  <Send className="w-5 h-5" />
-                  Send Message
-                </button>
-                <a
-                  href="https://wa.me/+923281598664"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 rounded-lg border border-green-700 text-green-700 px-6 py-3 font-semibold hover:bg-green-50 transition"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  Chat on WhatsApp
-                </a>
-              </div>
-            </form>
+           <ContactForm/>
           </div>
 
           {/* ADDRESS + MAP + SOCIALS */}

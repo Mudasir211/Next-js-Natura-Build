@@ -15,6 +15,8 @@ export default function SignInPage() {
 
       {/* Sign In Form */}
       <SignIn
+      signUpUrl="/sign-up"      // your custom sign-up page
+  signInUrl="/sign-in"  
         appearance={{
           elements: {
             card:
@@ -24,6 +26,7 @@ export default function SignInPage() {
               "rounded-md border-green-300 focus:border-green-500 focus:ring-green-500",
             formButtonPrimary:
               "bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors",
+              
           },
         }}
       />

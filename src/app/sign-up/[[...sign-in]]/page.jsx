@@ -6,18 +6,19 @@ import Link from "next/link";
 
 export default function SignUpPage() {
   return (
-    <div className="flex items-center py-10 flex-col min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100">
+    <div className="flex items-center py-20 flex-col min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100">
       {/* Header */}
       <h1 className="text-3xl my-5 font-bold text-green-800">
         Welcome to <span className="text-green-700">NATURA.PK</span>
       </h1>
       <p className="text-gray-600 mb-6 text-sm sm:text-base max-w-md text-center">
         Join <span className="text-green-700 font-semibold">Natura</span> and
-        start your natural wellness journey 🌿
+        start your natural wellness journey 
       </p>
 
       {/* Clerk Sign Up Form */}
-      <SignUp
+      <SignUp  signUpUrl="/sign-up"      // your custom sign-up page
+  signInUrl="/sign-in" 
         appearance={{
           elements: {
             card: "shadow-lg rounded-2xl border border-green-200 bg-white/80 backdrop-blur-sm p-6",

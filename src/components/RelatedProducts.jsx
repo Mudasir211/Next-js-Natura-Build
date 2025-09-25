@@ -1,43 +1,49 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Oswald } from "next/font/google";
 
 const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 
-// ✅ Server component fetch
-async function getAllProducts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
-    cache: "no-store", // always fresh data
+// ✅ Get category slug + products safely
+async function getRelatedProducts(categoryName) {
+  // 1. Fetch categories to find slug
+  const catRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`, {
+    cache: "no-store",
   });
+  if (!catRes.ok) throw new Error("Failed to fetch categories");
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
+  const categories = await catRes.json();
+  const category = categories.find((c) => c.name === categoryName);
+  if (!category) return { products: [], slug: "" };
 
-  return res.json();
+  // 2. Fetch products using slug
+  const prodRes = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?category=${category.slug}`,
+    { cache: "no-store" }
+  );
+  if (!prodRes.ok) throw new Error("Failed to fetch products");
+
+  const products = await prodRes.json();
+  return { products, slug: category.slug };
 }
 
-export default async function AllProducts() {
-  const products = await getAllProducts();
+export default async function RelatedProducts({ category }) {
+  const { products, slug } = await getRelatedProducts(category);
 
-  // show only first 10
-  const displayedProducts = products.slice(0, 10);
+  // show only first 6
+  const displayedProducts = products.slice(0, 6);
 
   return (
     <section className="py-16 bg-gradient-to-b from-green-50 to-white">
-      <div className="max-w-7xl mx-auto px-6 text-center space-y-10">
+      <div className="max-w-7xl mx-auto px-3 text-center space-y-10">
         {/* Section Title */}
         <h2
           className={`text-3xl -skew-x-10 md:text-4xl ${oswald.className} font-bold text-green-800`}
         >
-          All Products
+          Related Products
         </h2>
         <p className="text-gray-600 font-bold max-w-2xl mx-auto">
-          Explore our full range of{" "}
-          <span className="text-green-700 font-medium">
-            herbal and natural products
-          </span>{" "}
-          — carefully crafted to support your health & well-being.
+          Explore more from{" "}
+          <span className="text-green-700 font-medium">{category}</span>
         </p>
 
         {/* Product Grid */}
@@ -93,13 +99,13 @@ export default async function AllProducts() {
         </div>
 
         {/* ✅ See All Link */}
-        {products.length > 10 && (
+        {products.length > 6 && slug && (
           <div className="mt-8">
             <Link
-              href="/products"
+              href={`/products?category=${slug}`}
               className="inline-block bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-800 transition"
             >
-              See All Products
+              See All Relevant Products
             </Link>
           </div>
         )}

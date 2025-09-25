@@ -5,6 +5,7 @@ import ProductReviews from "@/components/ProductReviews";
 import AddToCartButton from "@/components/AddToCartButton";
 import { Leaf, Globe, ShieldCheck } from "lucide-react";
 import BuyNowButton from "@/components/BuyNowButton";
+import RelatedProducts from "@/components/RelatedProducts";
 
 async function getProduct(id) {
   const res = await fetch(
@@ -23,6 +24,62 @@ async function getReviews(productId) {
   if (!res.ok) throw new Error("Failed to fetch reviews");
   return res.json();
 }
+
+export async function generateMetadata({ params }) {
+  const { productId } = params;
+  const product = await getProduct(productId);
+
+  const firstImage =
+    product.images && product.images.length > 0
+      ? product.images[0]
+      : "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png"; // fallback logo
+
+  return {
+    title: `${product.title} | Natura.pk`,
+    description:
+      product.shortDescription ||
+      `Buy ${product.title} at Natura.pk — premium herbal & organic products crafted for natural wellness and beauty.`,
+    keywords: [
+      product.title,
+      "Natura.pk",
+      "herbal products",
+      "organic skincare",
+      "herbal hair oil",
+      "bio organic hair oil",
+      "natural remedies",
+      "ayurvedic remedies",
+      "wellness products",
+    ],
+    openGraph: {
+      title: `${product.title} | Natura.pk`,
+      description:
+        product.shortDescription ||
+        `Discover ${product.title}, made with natural ingredients for health & beauty.`,
+      url: `https://naturapk.store/product/${product._id}`,
+      siteName: "Natura.pk",
+      images: [
+        {
+          url: firstImage,
+          width: 1200,
+          height: 630,
+          alt: product.title,
+        },
+      ],
+      locale: "en_PK",
+      type: "website", // ✅ must be website (Next.js safe)
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.title} | Natura.pk`,
+      description:
+        product.shortDescription ||
+        `Shop ${product.title} from Natura.pk’s herbal & organic collection.`,
+      images: [firstImage],
+    },
+  };
+}
+
+
 
 export default async function ProductPage({ params }) {
   const { productId } = params;
@@ -109,6 +166,8 @@ export default async function ProductPage({ params }) {
 
       {/* Reviews */}
       <ProductReviews productId={product._id} />
+      <RelatedProducts category={product.category}/>
+      
     </div>
   );
 }

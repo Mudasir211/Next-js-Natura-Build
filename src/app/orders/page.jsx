@@ -44,7 +44,9 @@ export default function OrdersPage() {
       {orders.length === 0 ? (
         <p>You have no orders yet.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 relative">
+           <Link className="rounded-2xl text-xs absolute right-0 -top-14 text-red-600 p-3" href={'order-cancellation'} >Request Order Cancellation </Link>
+
           {orders.map((o) => (
             <Link
               key={o._id}
@@ -53,7 +55,7 @@ export default function OrdersPage() {
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-semibold">Order #{o._id}</p>
+                  <p className="font-semibold ">Order #{o._id}</p>
                   <p className="text-sm text-gray-600">
                     Placed: {new Date(o.placedAt).toLocaleString()}
                   </p>
@@ -77,6 +79,7 @@ export default function OrdersPage() {
           ))}
         </div>
       )}
+     
     </div>
   );
 }

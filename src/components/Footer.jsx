@@ -84,26 +84,19 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/pages/privacy-policy" className="hover:text-green-300">
+              <Link href="/privacy-policy" className="hover:text-green-300">
                 Privacy & Policy
               </Link>
             </li>
+           
             <li>
-              <Link
-                href="/pages/returns-exchanges"
-                className="hover:text-green-300"
-              >
-                Return & Exchange
-              </Link>
-            </li>
-            <li>
-              <Link href="/pages/delivery-orders" className="hover:text-green-300">
+              <Link href="/delivery-orders" className="hover:text-green-300">
                 Delivery & Orders
               </Link>
             </li>
             <li>
               <Link
-                href="/pages/cancellation-policy"
+                href="/order-cancellation"
                 className="hover:text-green-300"
               >
                 Order Cancellation
@@ -118,13 +111,18 @@ export default function Footer() {
             <Info className="w-5 h-5" /> About Us
           </h2>
           <ul className="space-y-3 text-base">
+             <li>
+              <Link href="/contact" className="hover:text-green-300">
+                Reach Us
+              </Link>
+            </li>
             <li>
-              <Link href="/pages/about-us" className="hover:text-green-300">
+              <Link href="/about" className="hover:text-green-300">
                 About Us
               </Link>
             </li>
             <li>
-              <Link href="/pages/our-mission" className="hover:text-green-300">
+              <Link href="/our-mission" className="hover:text-green-300">
                 Our Mission
               </Link>
             </li>
@@ -133,15 +131,7 @@ export default function Footer() {
         </div>
 
         {/* Newsletter */}
-        <div>
-          <h2 className="flex items-center gap-2 text-xl font-semibold mb-5">
-            <Newspaper className="w-5 h-5" /> Newsletter
-          </h2>
-          <p className="text-base mb-4 opacity-90">
-            Stay updated with exclusive offers, new arrivals, and insider-only deals!
-          </p>
-         
-        </div>
+       
       </div>
 
       {/* Bottom Section */}

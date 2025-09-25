@@ -38,7 +38,7 @@ export default async function BestSellersComponent() {
         </p>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-10">
+        <div className="grid grid-cols-2 lg:px-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-10">
           {products.length > 0 ? (
             products.map((item) => (
               <Link  key={item._id} href={`/product/${item._id}`}>
@@ -57,7 +57,7 @@ export default async function BestSellersComponent() {
 
 
 
-                    <span className="absolute top-2 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                    <span className="absolute top-3 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                       Bestseller
                     </span>
                   </div>

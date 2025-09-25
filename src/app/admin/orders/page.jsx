@@ -2,14 +2,16 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Leaf, ChevronDown, ChevronUp } from "lucide-react";
+import { Leaf, ChevronDown, ChevronUp, Search } from "lucide-react";
 
 export default function AdminOrdersPage() {
   const { isLoaded, user } = useUser();
   const router = useRouter();
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [authorized, setAuthorized] = useState(false);
-  const [expanded, setExpanded] = useState({}); // track expanded rows
+  const [expanded, setExpanded] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -20,7 +22,11 @@ export default function AdminOrdersPage() {
 
   const fetchOrders = async () => {
     const res = await fetch("/api/orders?admin=true");
-    if (res.ok) setOrders(await res.json());
+    if (res.ok) {
+      const data = await res.json();
+      setOrders(data);
+      setFilteredOrders(data); // initialize with all orders
+    }
   };
 
   useEffect(() => {
@@ -40,6 +46,26 @@ export default function AdminOrdersPage() {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (!query) {
+      setFilteredOrders(orders);
+      return;
+    }
+
+    const filtered = orders.filter((o) => {
+      return (
+        o._id.toLowerCase().includes(query) ||
+        o.shippingAddress?.fullName?.toLowerCase().includes(query) ||
+        o.shippingAddress?.email?.toLowerCase().includes(query) ||
+        o.shippingAddress?.phone?.toLowerCase().includes(query)
+      );
+    });
+    setFilteredOrders(filtered);
+  };
+
   if (!authorized) return <p className="mt-16 text-center">Checking access…</p>;
 
   return (
@@ -49,8 +75,20 @@ export default function AdminOrdersPage() {
           <Leaf className="w-8 h-8 text-green-600" /> Natura Admin – Orders
         </h1>
 
+        {/* 🔍 Search Bar */}
+        <div className="flex items-center gap-2 max-w-md bg-white px-3 py-2 rounded-lg shadow border">
+          <Search className="w-5 h-5 text-gray-500" />
+          <input
+            type="text"
+            placeholder="Search by Order ID, Name, Email, Phone..."
+            value={searchQuery}
+            onChange={handleSearch}
+            className="flex-1 outline-none text-sm"
+          />
+        </div>
+
         <div className="bg-white rounded-2xl shadow-xl sm:p-6 border border-green-100 overflow-x-auto">
-          {orders.length === 0 ? (
+          {filteredOrders.length === 0 ? (
             <p className="text-center text-gray-600">No orders found.</p>
           ) : (
             <table className="min-w-full text-sm">
@@ -65,7 +103,7 @@ export default function AdminOrdersPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((o) => (
+                {filteredOrders.map((o) => (
                   <React.Fragment key={o._id}>
                     {/* Main row */}
                     <tr className="border-b hover:bg-gray-50">

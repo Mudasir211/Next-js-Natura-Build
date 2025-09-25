@@ -15,8 +15,9 @@ export default async function Navbar() {
     { name: "Cart", href: "/cart" },
     { name: "Your Orders", href: "/orders" },
  { name: "Products", href: "/products" },
-    { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
+
+    { name: "About Us", href: "/about" },
   ];
 
   // ✅ If admin, show Admin Panel

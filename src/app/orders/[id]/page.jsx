@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2, Copy } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function OrderDetailPage() {
   const params = useParams();
@@ -14,22 +15,47 @@ export default function OrderDetailPage() {
       .then((data) => setOrder(data));
   }, [params.id]);
 
-  if (!order) return (<div className="flex justify-center items-center py-24">
-          <Loader2 className="w-8 h-8 text-green-700 animate-spin" />
-        </div>);
+  if (!order)
+    return (
+      <div className="flex justify-center items-center py-24">
+        <Loader2 className="w-8 h-8 text-green-700 animate-spin" />
+      </div>
+    );
 
   const placedDate = order.placedAt || order.createdAt;
 
+  const copyOrderId = () => {
+    navigator.clipboard.writeText(order._id);
+    toast.success("Order ID copied!");
+  };
+
   return (
     <div className="max-w-4xl mx-auto mt-20 p-8 bg-white rounded-2xl shadow-xl space-y-8">
-      <h1 className="text-2xl font-bold text-green-800">Order #{order._id}</h1>
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-green-800">
+          Order #{order._id}
+        </h1>
+        <button
+          onClick={copyOrderId}
+          className="p-1 text-gray-500 hover:text-green-700 transition"
+          title="Copy Order ID"
+        >
+          <Copy className="w-5 h-5" />
+        </button>
+      </div>
 
       {/* Dates */}
       <div className="text-sm text-gray-600 space-y-1">
         {placedDate && <p>Placed: {new Date(placedDate).toLocaleString()}</p>}
-        {order.shippedAt && <p>Shipped: {new Date(order.shippedAt).toLocaleString()}</p>}
-        {order.deliveredAt && <p>Delivered: {new Date(order.deliveredAt).toLocaleString()}</p>}
-        {order.cancelledAt && <p>Cancelled: {new Date(order.cancelledAt).toLocaleString()}</p>}
+        {order.shippedAt && (
+          <p>Shipped: {new Date(order.shippedAt).toLocaleString()}</p>
+        )}
+        {order.deliveredAt && (
+          <p>Delivered: {new Date(order.deliveredAt).toLocaleString()}</p>
+        )}
+        {order.cancelledAt && (
+          <p>Cancelled: {new Date(order.cancelledAt).toLocaleString()}</p>
+        )}
       </div>
 
       {/* Shipping */}
@@ -38,7 +64,6 @@ export default function OrderDetailPage() {
         <p className="font-medium">{order.shippingAddress.fullName}</p>
         <p>{order.shippingAddress.address}</p>
         <p>{order.shippingAddress.house}</p>
-
         <p>{order.shippingAddress.street}</p>
         <p>
           {order.shippingAddress.city}, {order.shippingAddress.postalCode},{" "}
@@ -61,7 +86,7 @@ export default function OrderDetailPage() {
                 />
                 <div>
                   <Link
-                    href={`/product/${i.product}`} // assuming `i.product` is the product ID
+                    href={`/product/${i.product}`}
                     className="font-medium hover:underline text-green-700"
                   >
                     {i.name}

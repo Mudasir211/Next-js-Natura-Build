@@ -2,12 +2,55 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin, Leaf, Heart, ShieldCheck } from "lucide-react";
 import Logo from "../../assets/logo.png"; // adjust path if needed
+import AboutWhyNatura from "@/components/AboutWhyNatura";
+export const metadata = {
+  title: "About Us | Natura.pk",
+  description:
+    "Discover Natura.pk – your trusted partner for natural, herbal, and organic products in Pakistan. Learn about our mission, vision, and why thousands trust Natura for health and wellness.",
+  openGraph: {
+    title: "About Natura.pk | Herbal & Organic Products",
+    description:
+      "At Natura.pk, we believe in the healing power of nature. Explore our mission, vision, and why we are trusted across Pakistan for natural wellness solutions.",
+    url: "https://naturapk.store/about",
+    siteName: "Natura.pk",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png", // ✅ your Cloudinary logo
+        width: 800,
+        height: 800,
+        alt: "Natura.pk Logo",
+      },
+    ],
+    locale: "en_PK",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Natura.pk | Herbal & Organic Products",
+    description:
+      "Learn more about Natura.pk’s journey, mission, and why our herbal and organic products are trusted nationwide.",
+    images: [
+      "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png",
+    ],
+  },
+  keywords: [
+    "Natura.pk",
+    "About Natura",
+    "Herbal products Pakistan",
+    "Organic wellness",
+    "Natural remedies",
+    "Ayurvedic products",
+    "Certified herbal products",
+  ],
+};
+
 
 export default function AboutPage() {
   return (
     <div className="bg-gray-50 py-14 text-gray-800">
+
       {/* Hero Section */}
-      <section className="relative bg-green-700 text-white py-20">
+      <section className="relative mb-10 bg-green-700 text-white py-20">
         <div className="absolute inset-0">
           <Image
             src={Logo}
@@ -26,7 +69,7 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
-
+<AboutWhyNatura/>
       {/* Who We Are */}
       <section className="py-16 max-w-6xl mx-auto px-6 text-center">
         <h2 className="text-3xl font-bold text-green-800 mb-6">Who We Are</h2>
@@ -41,31 +84,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Products */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-green-800 mb-10">
-            Our Products
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { title: "Herbal Oils", desc: "Pure oils for hair & skin." },
-              { title: "Organic Powders", desc: "Amla, Ashwagandha & more." },
-              { title: "Wellness Supplements", desc: "Capsules & drops." },
-              { title: "Skincare", desc: "Neem packs, natural shampoos." },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="p-6 bg-green-50 rounded-2xl shadow hover:shadow-lg transition"
-              >
-                <h3 className="text-xl font-semibold text-green-700">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-gray-600">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+     
 
       {/* Mission & Vision */}
       <section className="py-16 max-w-6xl mx-auto px-6 text-center">
@@ -121,10 +140,10 @@ export default function AboutPage() {
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-6 text-lg">
           <a
-            href="tel:+923057126897"
+            href="tel:+923281598664"
             className="flex items-center gap-2 text-green-700 hover:underline"
           >
-            <Phone className="w-5 h-5" /> +92 305 7126897
+            <Phone className="w-5 h-5" /> +92 328 1598664
           </a>
           <a
             href="mailto:natura.pk1999@gmail.com"
@@ -137,7 +156,7 @@ export default function AboutPage() {
             target="_blank"
             className="flex items-center gap-2 text-green-700 hover:underline"
           >
-            <MapPin className="w-5 h-5" /> Meer Muktar Road, Bhalwal
+            <MapPin className="w-5 h-5" /> Bhalwal,Sargodha
           </a>
         </div>
       </section>
