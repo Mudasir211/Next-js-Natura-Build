@@ -22,7 +22,7 @@ export default async function Navbar() {
 
   // ✅ If admin, show Admin Panel
   if (user?.publicMetadata?.role === "admin") {
-    navLinks.push({ name: "Admin Panel", href: "/admin/products" });
+    navLinks.push({ name: "Admin Panel", href: "/admin" });
   }
 
   return (
