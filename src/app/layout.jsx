@@ -33,6 +33,12 @@ export const metadata = {
     "wellness products",
     "natural beauty solutions",
   ],
+   icons: {
+    icon: [
+      { url: "/favicon.ico" },       // classic ICO
+      { url: "/favicon.png" }, // modern PNG fallback
+    ], // favicon in /public
+  },
   openGraph: {
     title: "Natura.pk | Herbal & Organic Products for Natural Wellness",
     description:
