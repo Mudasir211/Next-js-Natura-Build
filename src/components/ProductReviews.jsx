@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { Edit2, Trash2, Check, X } from "lucide-react";
+import { Edit2, Trash2, Check, X, Verified } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import RatingSystem from "./RatingSystem";
 import AverageStars from "./AverageStars";
 import { SelectableStar } from "./SelectableStar";
+import ReviewImageUpload from "./ReviewImageUpload";
 
 const stringToColor = (str) => {
   let hash = 0;
@@ -24,9 +25,11 @@ export default function ProductReviews({ productId }) {
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
   const [name, setName] = useState("");
+  const [images, setImages] = useState([]);
   const [hasReviewed, setHasReviewed] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showConfirm, setShowConfirm] = useState({ open: false, id: null });
+  const [lightbox, setLightbox] = useState({ open: false, url: "" });
 
   const fetchReviews = async () => {
     const res = await fetch(`/api/reviews?product=${productId}`);
@@ -57,6 +60,8 @@ export default function ProductReviews({ productId }) {
           title,
           comment,
           name,
+          images,
+          userEmail: user.primaryEmailAddress?.emailAddress || "", // ✅ send Clerk email
         }),
       });
 
@@ -68,6 +73,7 @@ export default function ProductReviews({ productId }) {
       setTitle("");
       setComment("");
       setName("");
+      setImages([]);
       setEditingId(null);
       setShowForm(false);
       fetchReviews();
@@ -82,6 +88,7 @@ export default function ProductReviews({ productId }) {
     setTitle(r.title || "");
     setComment(r.comment);
     setName(r.name);
+    setImages(r.images || []);
     setShowForm(true);
   };
 
@@ -144,6 +151,7 @@ export default function ProductReviews({ productId }) {
               type="text"
               placeholder="Your display name"
               value={name}
+              maxLength={20}
               onChange={(e) => setName(e.target.value)}
               className="w-full p-3 border rounded-xl"
               required
@@ -153,6 +161,7 @@ export default function ProductReviews({ productId }) {
               type="text"
               placeholder="Review Title (e.g. Amazing product!)"
               value={title}
+              maxLength={30}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full p-3 border rounded-xl"
               required
@@ -174,10 +183,14 @@ export default function ProductReviews({ productId }) {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={4}
+              maxLength={400}
               placeholder="Write your review..."
               className="w-full p-3 border rounded-xl"
               required
             />
+
+            {/* Image Upload */}
+            <ReviewImageUpload images={images} setImages={setImages} />
 
             <div className="flex gap-4 justify-end">
               <button
@@ -188,6 +201,7 @@ export default function ProductReviews({ productId }) {
                   setRating(5);
                   setTitle("");
                   setComment("");
+                  setImages([]);
                 }}
                 className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl flex items-center gap-2"
               >
@@ -215,7 +229,7 @@ export default function ProductReviews({ productId }) {
         {reviews.map((r) => (
           <div
             key={r._id}
-            className="bg-white p-8 rounded-2xl shadow-lg border"
+            className="bg-white p-5 rounded-2xl shadow-lg border"
           >
             <div className="flex items-start gap-3">
               <div
@@ -226,19 +240,55 @@ export default function ProductReviews({ productId }) {
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-green-700">{r.name}</span>
+                  <span className="font-semibold break-all text-green-700">
+                    {r.name}
+                  </span>
                   <AverageStars averageRating={r.rating} size={18} />
                 </div>
+                {r.userEmail && (
+                  <p className="text-sm text-gray-500">{r.userEmail}</p>
+                )}
                 {r.title && (
-                  <p className="mt-1 font-semibold text-gray-900">{r.title}</p>
+                  <p className="mt-1 break-all font-semibold text-gray-900">
+                    {r.title}
+                  </p>
                 )}
                 {r.comment && (
-                  <p className="mt-2 text-gray-700">{r.comment}</p>
+                  <p className="mt-2 break-all text-gray-700">{r.comment}</p>
+                )}
+
+                {/* Review Images */}
+                {r.images?.length > 0 && (
+                  <div className="mt-3 mx-auto">
+                    <p className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                      📷 {r.images.length} Photo
+                      {r.images.length > 1 ? "s" : ""}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-3">
+                      {r.images.map((url, i) => (
+                        <div
+                          key={i}
+                          className="relative w-20 h-20 rounded-lg overflow-hidden border cursor-pointer hover:scale-105 transition"
+                          onClick={() =>
+                            setLightbox({ open: true, url })
+                          }
+                        >
+                          <img
+                            src={url}
+                            alt={`review-img-${i}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
+
+            {/* Edit / Delete */}
             {user?.id === r.user && (
-              <div className="flex gap-3 mt-4">
+              <div className="flex justify-end gap-3 mt-4">
                 <button
                   onClick={() => handleEdit(r)}
                   className="flex items-center gap-1 px-3 py-2 bg-yellow-100 rounded-lg hover:bg-yellow-200"
@@ -283,6 +333,35 @@ export default function ProductReviews({ productId }) {
           </div>
         </div>
       )}
+
+      {/* Lightbox Modal */}
+      {lightbox.open && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <img
+            src={lightbox.url}
+            alt="enlarged-review-img"
+            className="max-h-[90%] max-w-[90%] rounded-lg shadow-2xl"
+          />
+          <button
+            onClick={() => setLightbox({ open: false, url: "" })}
+            className="absolute top-6 right-6 text-white text-2xl"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+      {/* Integrity Note */}
+<div className="max-w-2xl mx-auto mt-16 text-center flex flex-col items-center gap-4 text-sm text-gray-500 border-t pt-6">
+ <Verified className="h-10 mt-4
+     w-10"/>  
+  <p>
+    
+    All reviews are submitted by verified customers using their Clerk
+    account. Each review is tied to a real email address to ensure
+    authenticity and maintain trust in our community.
+  </p>
+</div>
+
     </div>
   );
 }

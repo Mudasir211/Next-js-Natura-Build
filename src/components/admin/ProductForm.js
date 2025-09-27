@@ -188,7 +188,7 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
           >
             <option value="">Select a category</option>
             {categories.map((cat) => (
-              <option key={cat._id} value={cat.slug}>
+              <option key={cat._id} value={cat.name}>
                 {cat.name}
               </option>
             ))}

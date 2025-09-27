@@ -17,7 +17,16 @@ export async function POST(req) {
   if (!user)
     return Response.json({ message: "Not authorized" }, { status: 401 });
 
-  const { product: productId, rating, comment, name, title } = await req.json();
+  const {
+    product: productId,
+    rating,
+    comment,
+    name,
+    userEmail,
+    title,
+    images,
+  } = await req.json();
+
   if (!productId || !rating || !name || !title) {
     return Response.json({ message: "Missing fields" }, { status: 400 });
   }
@@ -34,9 +43,11 @@ export async function POST(req) {
     product: productId,
     user: user.id,
     name,
+    userEmail,
     title,
     rating,
     comment,
+    images: images || [], // ✅ store images
   });
 
   return Response.json(review.toObject(), { status: 201 });

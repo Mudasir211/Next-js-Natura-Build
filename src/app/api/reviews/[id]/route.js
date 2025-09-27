@@ -23,6 +23,7 @@ export async function PUT(req, { params }) {
   review.comment = body.comment ?? review.comment;
   review.name = body.name ?? review.name;
   review.title = body.title ?? review.title;
+  review.images = body.images ?? review.images; // ✅ update images
 
   await review.save();
   return Response.json(review.toObject(), { status: 200 });

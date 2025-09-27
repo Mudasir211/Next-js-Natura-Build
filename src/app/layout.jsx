@@ -6,6 +6,8 @@ import { Oswald,Outfit } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 
+import NextTopLoader from "nextjs-toploader";
+
 const oswald = Oswald({
   subsets: ["latin"],
   weights: ["400", "500", "600", "700"], // pick what you need
@@ -80,6 +82,7 @@ export default function RootLayout({ children }) {
       >
        
     <Navbar/>
+    <NextTopLoader color="#22c55e" height={3} showSpinner={false} />
         {children}
         <Footer/>
       </body>
