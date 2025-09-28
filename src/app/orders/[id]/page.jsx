@@ -32,7 +32,7 @@ export default function OrderDetailPage() {
   return (
     <div className="max-w-4xl mx-auto mt-20 p-8 bg-white rounded-2xl shadow-xl space-y-8">
       <div className="flex items-center gap-2">
-        <h1 className="text-2xl font-bold text-green-800">
+        <h1 className="text-2xl break-all font-bold text-green-800">
           Order #{order._id}
         </h1>
         <button
