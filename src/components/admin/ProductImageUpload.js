@@ -13,10 +13,10 @@ export default function ProductImageUpload({ images, setImages }) {
     <div className="space-y-4">
       {/* Upload Widget */}
       <CldUploadWidget
-        uploadPreset="ml_default" // make sure this preset exists in Cloudinary settings
+        uploadPreset="bpmd7dij" // make sure this preset exists in Cloudinary settings
         options={{
           multiple: false, // only one at a time
-          maxFiles: 6,
+          maxFiles: 8,
         }}
         onSuccess={(result) => {
           if (result?.info?.secure_url) {
@@ -30,8 +30,8 @@ export default function ProductImageUpload({ images, setImages }) {
           <button
             type="button"
             onClick={() => {
-              if (images.length >= 6) {
-                toast.error("Max 6 images allowed");
+              if (images.length >= 8) {
+                toast.error("Max 8 images allowed");
                 return;
               }
               open();

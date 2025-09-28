@@ -146,76 +146,110 @@ export default function ProductReviews({ productId }) {
           <h3 className="text-xl font-semibold mb-4 text-green-700">
             {editingId ? "Edit Your Review" : "Write a Review"}
           </h3>
-          <form onSubmit={handleSubmit} className="space-y-4 z-50">
-            <input
-              type="text"
-              placeholder="Your display name"
-              value={name}
-              maxLength={20}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 border rounded-xl"
-              required
-            />
+         <form
+  onSubmit={handleSubmit}
+  className="space-y-6 bg-white p-6 rounded-2xl shadow-lg border border-gray-100 max-w-xl mx-auto"
+>
+  {/* Name */}
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700">
+      Display Name
+    </label>
+    <input
+      type="text"
+      placeholder="Your display name"
+      value={name}
+      maxLength={20}
+      onChange={(e) => setName(e.target.value)}
+      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+      required
+    />
+  </div>
 
-            <input
-              type="text"
-              placeholder="Review Title (e.g. Amazing product!)"
-              value={title}
-              maxLength={30}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-3 border rounded-xl"
-              required
-            />
+  {/* Title */}
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700">
+      Review Title
+    </label>
+    <input
+      type="text"
+      placeholder="e.g. Amazing product!"
+      value={title}
+      maxLength={30}
+      onChange={(e) => setTitle(e.target.value)}
+      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+      required
+    />
+  </div>
 
-            {/* Rating input */}
-            <div className="flex items-center gap-2">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <SelectableStar
-                  key={i}
-                  filled={i < rating}
-                  size={28}
-                  onClick={() => setRating(i + 1)}
-                />
-              ))}
-            </div>
+  {/* Rating */}
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700">
+      Rating
+    </label>
+    <div className="flex items-center gap-2">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <SelectableStar
+          key={i}
+          filled={i < rating}
+          size={32}
+          onClick={() => setRating(i + 1)}
+          className="cursor-pointer transition-transform hover:scale-110"
+        />
+      ))}
+    </div>
+  </div>
 
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              rows={4}
-              maxLength={400}
-              placeholder="Write your review..."
-              className="w-full p-3 border rounded-xl"
-              required
-            />
+  {/* Comment */}
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700">
+      Your Review
+    </label>
+    <textarea
+      value={comment}
+      onChange={(e) => setComment(e.target.value)}
+      rows={4}
+      maxLength={400}
+      placeholder="Write your detailed review..."
+      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition resize-none"
+      required
+    />
+  </div>
 
-            {/* Image Upload */}
-            <ReviewImageUpload images={images} setImages={setImages} />
+  {/* Image Upload */}
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700">
+      Upload Images (optional)
+    </label>
+    <ReviewImageUpload images={images} setImages={setImages} />
+  </div>
 
-            <div className="flex gap-4 justify-end">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowForm(false);
-                  setEditingId(null);
-                  setRating(5);
-                  setTitle("");
-                  setComment("");
-                  setImages([]);
-                }}
-                className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl flex items-center gap-2"
-              >
-                <X size={18} /> Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl flex items-center gap-2"
-              >
-                <Check size={20} />
-                {editingId ? "Update Review" : "Submit Review"}
-              </button>
-            </div>
-          </form>
+  {/* Buttons */}
+  <div className="flex gap-4 justify-end pt-4">
+    <button
+      type="button"
+      onClick={() => {
+        setShowForm(false);
+        setEditingId(null);
+        setRating(5);
+        setTitle("");
+        setComment("");
+        setImages([]);
+      }}
+      className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center gap-2 text-gray-700 transition"
+    >
+      <X size={18} /> Cancel
+    </button>
+    <button
+      type="submit"
+      className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl flex items-center gap-2 shadow-md transition"
+    >
+      <Check size={20} />
+      {editingId ? "Update Review" : "Submit Review"}
+    </button>
+  </div>
+</form>
+
         </div>
       )}
 

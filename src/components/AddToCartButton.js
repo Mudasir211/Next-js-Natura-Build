@@ -6,8 +6,39 @@ export default function AddToCartButton({ product }) {
   const { user } = useUser();
 
   const addToCart = async () => {
-    if (!user) return toast.error("You must be logged in to add to cart");
+    if (!user) {
+      // --- Guest Cart via localStorage ---
+      try {
+        let localCart = JSON.parse(localStorage.getItem("cart")) || {
+          items: [],
+        };
 
+        // check if product already exists
+        const existing = localCart.items.find(
+          (i) => i.productId === product._id
+        );
+        if (existing) {
+          existing.qty += 1;
+        } else {
+          localCart.items.push({
+            productId: product._id,
+            name: product.title,
+            price: product.price,
+            image: product.images?.[0],
+            attributes: { size: product.size },
+            qty: 1,
+          });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        toast.success("Added to cart");
+      } catch (err) {
+        toast.error("Failed to update local cart");
+      }
+      return;
+    }
+
+    // --- Logged-in Cart via DB ---
     try {
       const res = await fetch("/api/cart", {
         method: "POST",

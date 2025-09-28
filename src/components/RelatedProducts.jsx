@@ -47,39 +47,40 @@ export default async function RelatedProducts({ category }) {
         </p>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:px-10 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:px-10  md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-10">
           {displayedProducts.length > 0 ? (
             displayedProducts.map((item) => (
               <Link key={item._id} href={`/product/${item._id}`}>
-                <div className="flex flex-col relative items-center gap-3 text-sm cursor-pointer group rounded-xl p-2 bg-white shadow-sm hover:shadow-lg transition duration-300 border border-green-100">
-                  {item.bestseller && (
-                    <span className="absolute top-5 left-3 z-40 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                <div className="flex flex-col  h-full cursor-pointer group rounded-xl p-3 bg-white shadow-sm hover:shadow-lg transition duration-300 border border-green-100">
+                  
+
+                  {/* Product Image */}
+                  <div className="relative w-full max-h-80 min-h-48 sm:h-72 flex items-center justify-center bg-white rounded-lg overflow-hidden">
+                    {item.bestseller && (
+                    <span className="absolute top-1 left-1 z-40 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                       Bestseller
                     </span>
                   )}
-                  {/* Product Image */}
-                  <div className="relative w-full h-48 sm:h-auto overflow-hidden rounded-lg">
-                    <div className="w-full h-48 sm:h-80 flex items-center justify-center bg-white rounded-lg overflow-hidden">
-                      <img
-                        src={item.images[0]}
-                        alt={item.title}
-                        className="h-full w-full object-contain sm:object-contain transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
+                    <img
+                      src={item.images[0]}
+                      alt={item.title}
+                      className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+                    />
                   </div>
 
                   {/* Product Info */}
-                  <div className="flex flex-col gap-1 text-left">
-                    <p className="font-medium text-green-900 group-hover:text-green-700">
+                  <div className="flex flex-col flex-grow justify-between mt-3 text-left">
+                    {/* ✅ Force 2 lines height for title */}
+                    <p className="font-medium text-green-900 line-clamp-2 min-h-[2.8rem] group-hover:text-green-700">
                       {item.title}
                     </p>
 
                     {item.onSale ? (
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2 mt-1">
                         <span className="text-gray-500 line-through text-xs">
                           Rs {item.cuttedPrice}
                         </span>
-                        <span className="font-bold text-xs text-green-700">
+                        <span className="font-bold text-green-700">
                           Rs {item.price}
                         </span>
                         <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
@@ -87,7 +88,9 @@ export default async function RelatedProducts({ category }) {
                         </span>
                       </div>
                     ) : (
-                      <p className="font-bold text-green-700">Rs {item.price}</p>
+                      <p className="font-bold text-green-700 mt-1">
+                        Rs {item.price}
+                      </p>
                     )}
                   </div>
                 </div>

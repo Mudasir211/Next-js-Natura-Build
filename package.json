@@ -23,7 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.541.0",
     "mongoose": "^8.15.1",
-    "nanoid": "^5.1.5",
+    "nanoid": "^5.1.6",
     "next": "15.3.2",
     "next-cloudinary": "^6.16.0",
     "nextjs-toploader": "^3.9.17",

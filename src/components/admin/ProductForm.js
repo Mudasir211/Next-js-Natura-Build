@@ -259,7 +259,7 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
       {/* Cloudinary Upload */}
       <div>
         <label className="block text-sm font-medium text-green-800 mb-1">
-          Upload Images (Max 6)
+          Upload Images (Max 8)
         </label>
         <ProductImageUpload images={images} setImages={setImages} />
       </div>

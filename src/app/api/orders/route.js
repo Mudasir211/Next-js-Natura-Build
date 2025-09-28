@@ -41,13 +41,10 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     await connectDB();
-    const user = await currentUser();
-    if (!user) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
 
     const body = await req.json();
     const {
+      user,
       items,
       shippingAddress,
       paymentMethod,
@@ -65,7 +62,7 @@ export async function POST(req) {
     }
 
     const order = await Order.create({
-      user: user.id,
+      user,
 
       items,
       shippingAddress,
@@ -77,7 +74,7 @@ export async function POST(req) {
     });
 
     // clear user cart
-    await Cart.deleteOne({ user: user.id });
+    await Cart.deleteOne({ user });
 
     // --- EMAILS ---
     // 1. Admin notification
