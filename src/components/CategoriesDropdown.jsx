@@ -1,26 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-export default function CategoriesDropdown({ mobile = false, onClick }) {
-  const [categories, setCategories] = useState([]);
+export default function CategoriesDropdown({ mobile = false, onClick, categories }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const fetchCats = async () => {
-      try {
-        const res = await fetch("/api/categories");
-        const data = await res.json();
-        setCategories(data);
-      } catch (err) {
-        console.error("Failed to load categories:", err);
-      }
-    };
-    fetchCats();
-  }, []);
 
   // ✅ Close dropdown if user clicks outside
   useEffect(() => {
@@ -34,9 +20,8 @@ export default function CategoriesDropdown({ mobile = false, onClick }) {
   }, []);
 
   if (mobile) {
-    // ✅ Mobile Expandable Categories
     return (
-      <div className="w-full mt-3 ">
+      <div className="w-full mt-3">
         <button
           onClick={() => setOpen(!open)}
           className="w-full flex justify-between items-center py-2 text-gray-700 font-medium hover:text-green-700 transition"
@@ -62,7 +47,6 @@ export default function CategoriesDropdown({ mobile = false, onClick }) {
     );
   }
 
-  // ✅ Desktop Dropdown (only toggles on click, stays open until clicked outside)
   return (
     <div className="relative ml-5" ref={dropdownRef}>
       <button
@@ -78,7 +62,7 @@ export default function CategoriesDropdown({ mobile = false, onClick }) {
               <li key={cat._id}>
                 <Link
                   href={`/products?category=${cat.slug}`}
-                  onClick={() => setOpen(false)} // ✅ closes dropdown on click
+                  onClick={() => setOpen(false)}
                   className="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-700 transition"
                 >
                   {cat.name}

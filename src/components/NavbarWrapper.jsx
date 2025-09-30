@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import CategoriesDropdown from "./CategoriesDropdown";
 
-export default function NavbarWrapper({ navLinks }) {
+export default function NavbarWrapper({ navLinks,categories }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -36,7 +36,8 @@ export default function NavbarWrapper({ navLinks }) {
 
           {/* Insert CategoriesDropdown right after "Products" */}
           {link.name === "Your Orders" && (
-            <CategoriesDropdown mobile onClick={() => setMenuOpen(false)} />
+            <CategoriesDropdown mobile onClick={() => setMenuOpen(false)} categories={categories} />
+
           )}
         </li>
       ))}
