@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Leaf, ShieldCheck, Sparkles, Heart } from "lucide-react";
-import About from '../assets/about.png'
+
 import AboutWhyNatura from "./AboutWhyNatura";
 import CustomerReviews from "./CustomerReviews";
 import LatestHighlights from "./LatestHighlights";

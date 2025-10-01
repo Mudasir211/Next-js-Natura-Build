@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import img from '../assets/image1.jpeg'
 import img2 from '../assets/image2.webp'
-import About from '../assets/about.png'
+
 import heartbeat from '../assets/heartbeat.webp'
 import planetearth from '../assets/planet-earth.webp'
 import foodstore from '../assets/food-store.webp'
@@ -20,7 +20,8 @@ export default function AboutWhyNatura() {
     {/* Imagery (goes first on mobile) */}
     <div className="flex justify-center relative order-1 md:order-2">
       <Image
-        src={About}
+      unoptimized
+        src='https://res.cloudinary.com/dpoxhiyts/image/upload/f_auto,q_auto,w_1920/v1759304160/about_e4wnym.png'
         alt="About Natura"
         width={560}
         height={400}
@@ -85,13 +86,13 @@ export default function AboutWhyNatura() {
 
       {/* CTA */}
       <div className="flex px-1 gap-4 mt-6">
-        <Link
+        <Link prefetch={false}
           href="/about"
           className="bg-green-700 text-white px-5 py-2 rounded-md font-medium hover:bg-green-800 transition"
         >
           Learn More
         </Link>
-        <Link
+        <Link prefetch={false}
           href="/products"
           className="border border-green-700 text-green-700 px-5 py-2 rounded-md hover:bg-green-50 transition"
         >
@@ -178,7 +179,7 @@ export default function AboutWhyNatura() {
 </div>
 
 
-            <Link
+            <Link prefetch={false}
               href="/products"
               className="inline-block bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition"
             >

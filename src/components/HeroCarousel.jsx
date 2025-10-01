@@ -4,10 +4,6 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 
-import Hero1 from "../assets/Home Hero.png";
-import Hero2 from "../assets/Home Hero15.jpeg"; // Mobile version
-import Hero3 from "../assets/Home Hero156.png"; // Desktop version
-
 export default function HeroCarousel() {
   return (
     <section className="relative pt-14 w-full">
@@ -18,36 +14,36 @@ export default function HeroCarousel() {
         loop={true}
         className="w-full"
       >
-        {[Hero1, "responsive-slide"].map((img, i) => (
+        {[
+          "https://res.cloudinary.com/dpoxhiyts/image/upload/f_auto,q_auto,w_1920/v1759302861/Home_Hero_kjlwno.png",
+          "responsive-slide",
+        ].map((img, i) => (
           <SwiperSlide key={i}>
             <div className="relative w-full md:h-[100vh] bg-[#daf1c5] flex justify-center items-center">
               {/* First slide → Hero1 */}
               {img !== "responsive-slide" && (
-                <Image
-                  src={Hero1}
-                  alt="Hero Slide 1"
+                <Image unoptimized
+                  src={img} // ✅ use the array value
+                  alt={`Hero Slide ${i + 1}`}
                   width={1920}
                   height={1080}
-                  priority
+                  priority={i === 0} // ✅ only first slide gets priority
                   className="w-full h-auto md:h-full object-contain md:object-cover object-center"
                 />
               )}
 
-              {/* Second slide → Hero2 (mobile) / Hero3 (desktop) */}
+              {/* Second slide → responsive images */}
               {img === "responsive-slide" && (
                 <>
-                  {/* Mobile image */}
                   <Image
-                    src={Hero2}
+                    src="https://res.cloudinary.com/dpoxhiyts/image/upload/v1759303111/Home_Hero15_pu45v7.jpg"
                     alt="Hero Slide Mobile"
                     width={1080}
                     height={1920}
                     className="block md:hidden w-full h-auto object-contain object-center"
                   />
-
-                  {/* Desktop image */}
                   <Image
-                    src={Hero3}
+                    src="https://res.cloudinary.com/dpoxhiyts/image/upload/v1759303194/Home_Hero156_ak9jpk.png"
                     alt="Hero Slide Desktop"
                     width={1920}
                     height={1080}

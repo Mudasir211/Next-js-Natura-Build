@@ -85,7 +85,7 @@ export default function OrderDetailPage() {
                   className="w-16 h-16 object-cover rounded-md border"
                 />
                 <div>
-                  <Link
+                  <Link prefetch={false}
                     href={`/product/${i.product}`}
                     className="font-medium hover:underline text-green-700"
                   >

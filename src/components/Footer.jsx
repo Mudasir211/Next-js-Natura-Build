@@ -32,7 +32,7 @@ export default function Footer() {
           <ul className="space-y-3 text-base">
             <li className="flex items-start gap-2">
               <MapPin className="w-5 h-5 mt-1" />
-              <Link
+              <Link prefetch={false}
                 href="https://maps.app.goo.gl/L58eKGw9SyPNJueG7"
                 target="_blank"
                 className="hover:text-green-300"
@@ -79,18 +79,18 @@ export default function Footer() {
           </h2>
           <ul className="space-y-3 text-base">
             <li>
-              <Link href="/contact" className="hover:text-green-300">
+              <Link prefetch={false} href="/contact" className="hover:text-green-300">
                 Contact
               </Link>
             </li>
             <li>
-              <Link href="/privacy-policy" className="hover:text-green-300">
+              <Link prefetch={false} href="/privacy-policy" className="hover:text-green-300">
                 Privacy & Policy
               </Link>
             </li>
            
             <li>
-              <Link href="/delivery-orders" className="hover:text-green-300">
+              <Link  prefetch={false} href="/delivery-orders" className="hover:text-green-300">
                 Delivery & Orders
               </Link>
             </li>
@@ -112,17 +112,17 @@ export default function Footer() {
           </h2>
           <ul className="space-y-3 text-base">
              <li>
-              <Link href="/contact" className="hover:text-green-300">
+              <Link prefetch={false} href="/contact" className="hover:text-green-300">
                 Reach Us
               </Link>
             </li>
             <li>
-              <Link href="/about" className="hover:text-green-300">
+              <Link prefetch={false} href="/about" className="hover:text-green-300">
                 About Us
               </Link>
             </li>
             <li>
-              <Link href="/our-mission" className="hover:text-green-300">
+              <Link prefetch={false} href="/our-mission" className="hover:text-green-300">
                 Our Mission
               </Link>
             </li>

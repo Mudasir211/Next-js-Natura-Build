@@ -4,6 +4,7 @@ import ProductFilters from "@/components/ProductFilters";
 import SortDropdown from "@/components/SortDropdown";
 import ProductSearch from "@/components/ProductSearch";
 
+// app/products/page.jsx
 async function fetchProducts({ search, categories, sort, bestseller }) {
   const params = new URLSearchParams();
   if (search) params.append("search", search);
@@ -11,16 +12,24 @@ async function fetchProducts({ search, categories, sort, bestseller }) {
   if (sort) params.append("sort", sort);
   if (bestseller) params.append("bestseller", "true");
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products?${params.toString()}`, { cache: "no-store" });
+  // ✅ Use ISR instead of no-store
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?${params.toString()}`,
+    { next: { revalidate: 60 } } // revalidates every 60s
+  );
   if (!res.ok) throw new Error("Failed to fetch products");
   return res.json();
 }
 
 async function fetchCategories() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`, { cache: "no-store" });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`,
+    { next: { revalidate: 300 } } // revalidates every 5 min
+  );
   if (!res.ok) throw new Error("Failed to fetch categories");
   return res.json();
 }
+
 // app/products/page.jsx
 export async function generateMetadata({ searchParams }) {
   const search = searchParams?.search || "";
@@ -182,9 +191,9 @@ export default async function ProductsPage({ searchParams }) {
                         <span className="font-bold text-xs text-green-700">
                           Rs {item.price}
                         </span>
-                        <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
+                         {item.discountPercentage>0 &&   <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
                           -{item.discountPercentage}%
-                        </span>
+                        </span>}
                       </div>
                     ) : (
                       <p className="font-bold text-green-700 mt-1">

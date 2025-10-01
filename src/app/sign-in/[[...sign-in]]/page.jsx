@@ -34,7 +34,7 @@ export default function SignInPage() {
       {/* Sign Up Option */}
       <p className="mt-6 text-green-700 text-sm">
         Don’t have an account?{" "}
-        <Link
+        <Link prefetch={false}
           href="/sign-up"
           className="text-emerald-600 font-semibold hover:underline hover:text-emerald-700"
         >

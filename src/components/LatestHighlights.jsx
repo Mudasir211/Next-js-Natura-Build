@@ -11,9 +11,9 @@ import { Oswald } from "next/font/google";
 const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 export default function LatestHighlights() {
   const highlights = [
-    { title: "Behind the Scenes", src: "/vid1.mp4" },
-    { title: "Customer Love", src: "/vid2.mp4" },
-    { title: "Natura’s Process", src: "/vid3.mp4" },
+    { title: "Behind the Scenes", src: "https://res.cloudinary.com/dpoxhiyts/video/upload/v1759304518/vid1_ecn2cd.mp4" },
+    { title: "Customer Love", src: "https://res.cloudinary.com/dpoxhiyts/video/upload/v1759304658/vid2_ix2pui.mp4" },
+    { title: "Natura’s Process", src: "https://res.cloudinary.com/dpoxhiyts/video/upload/v1759304828/vid3_rdbkvh.mp4" },
   ];
 
   return (

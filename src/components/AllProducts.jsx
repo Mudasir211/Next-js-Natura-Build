@@ -77,9 +77,9 @@ export default async function AllProducts() {
                         <span className="font-bold text-xs text-green-700">
                           Rs {item.price}
                         </span>
-                        <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
+                        {item.discountPercentage>0 &&   <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
                           -{item.discountPercentage}%
-                        </span>
+                        </span>}
                       </div>
                     ) : (
                       <p className="font-bold text-green-700 mt-1">

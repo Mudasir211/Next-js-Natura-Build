@@ -32,7 +32,7 @@ export default async function Navbar() {
     <nav className="w-full bg-white shadow-md fixed top-0 left-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-3 py-3">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
+        <Link prefetch={false} href="/" className="flex items-center space-x-2">
           <Image src={Logo} alt="Natura Logo" width={50} height={50} priority />
           <span className="text-xl font-bold text-green-800">NATURA.PK</span>
         </Link>

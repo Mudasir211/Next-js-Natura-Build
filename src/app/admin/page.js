@@ -45,6 +45,7 @@ export default function AdminPanel() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Products */}
           <Link
+            prefetch={false}
             href="/admin/products"
             className="group flex flex-col items-center justify-center gap-3 p-6 rounded-xl bg-green-50 hover:bg-green-100 shadow-sm border border-green-200 transition transform hover:-translate-y-1"
           >
@@ -54,6 +55,7 @@ export default function AdminPanel() {
 
           {/* Categories */}
           <Link
+            prefetch={false}
             href="/admin/categories"
             className="group flex flex-col items-center justify-center gap-3 p-6 rounded-xl bg-green-50 hover:bg-green-100 shadow-sm border border-green-200 transition transform hover:-translate-y-1"
           >
@@ -63,6 +65,7 @@ export default function AdminPanel() {
 
           {/* Orders */}
           <Link
+            prefetch={false}
             href="/admin/orders"
             className="group flex flex-col items-center justify-center gap-3 p-6 rounded-xl bg-green-50 hover:bg-green-100 shadow-sm border border-green-200 transition transform hover:-translate-y-1"
           >

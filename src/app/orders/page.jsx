@@ -45,10 +45,10 @@ export default function OrdersPage() {
         <p>You have no orders yet.</p>
       ) : (
         <div className="space-y-4 relative">
-           <Link className="rounded-2xl text-xs absolute right-0 -top-14 text-red-600 p-3" href={'order-cancellation'} >Request Order Cancellation </Link>
+           <Link prefetch={false} className="rounded-2xl text-xs absolute right-0 -top-14 text-red-600 p-3" href={'order-cancellation'} >Request Order Cancellation </Link>
 
           {orders.map((o) => (
-            <Link
+            <Link prefetch={false}
               key={o._id}
               href={`/orders/${o._id}`}
               className="block bg-white rounded-lg shadow-md p-4 hover:bg-gray-50 transition"

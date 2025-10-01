@@ -39,7 +39,7 @@ export default function SignUpPage() {
       {/* Already have an account */}
       <p className="mt-6 text-gray-600 text-sm">
         Already have an account?{" "}
-        <Link
+        <Link prefetch={false}
           href="/sign-in"
           className="text-green-700 font-semibold hover:underline hover:text-green-800"
         >

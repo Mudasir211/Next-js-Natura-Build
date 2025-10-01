@@ -44,7 +44,7 @@ export default async function BestSellersComponent() {
         <div className="grid grid-cols-2 lg:px-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-6">
           {products.length > 0 ? (
             products.map((item) => (
-               <Link key={item._id} href={`/product/${item._id}`}>
+               <Link  key={item._id} href={`/product/${item._id}`}>
                 <div className="flex flex-col h-full cursor-pointer group rounded-xl p-3 bg-white shadow-sm hover:shadow-lg transition duration-300 border border-green-100">
                   
 
