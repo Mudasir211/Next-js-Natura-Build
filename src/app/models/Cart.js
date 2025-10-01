@@ -12,6 +12,7 @@ const cartSchema = new mongoose.Schema(
         price: Number,
         image: String,
         attributes: Object,
+        addedAt: { type: Date, default: Date.now },
       },
     ],
   },

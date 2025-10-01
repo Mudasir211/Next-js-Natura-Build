@@ -103,64 +103,67 @@ export default function CartDrawer() {
         <p className="text-gray-600">Your cart is empty.</p>
       ) : (
         <div className="space-y-6">
-          {cart.items.map((item) => (
-            <div key={user ? item.product : item.productId}>
-              <div
-                key={user ? item.product : item.productId} // key must be here
-                className="flex items-center justify-between border-b pb-4"
-              >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-16 h-16 rounded-lg object-cover border"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-green-800">
-                      {item.name}
-                    </h4>
-                    <p className="text-sm text-gray-600">Rs.{item.price}</p>
+          {cart.items
+            .slice() // create a copy to avoid mutating state
+            .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt))
+            .map((item) => (
+              <div key={user ? item.product : item.productId}>
+                <div
+                  key={user ? item.product : item.productId} // key must be here
+                  className="flex items-center justify-between border-b pb-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 rounded-lg object-cover border"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-green-800">
+                        {item.name}
+                      </h4>
+                      <p className="text-sm text-gray-600">Rs.{item.price}</p>
+                    </div>
                   </div>
                 </div>
+                <div className="flex mt-2 items-center gap-3">
+                  <button
+                    disabled={actionLoading}
+                    onClick={() =>
+                      updateQty(
+                        user ? item.product : item.productId,
+                        item.qty - 1
+                      )
+                    }
+                    className="p-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span className="font-semibold">{item.qty}</span>
+                  <button
+                    disabled={actionLoading}
+                    onClick={() =>
+                      updateQty(
+                        user ? item.product : item.productId,
+                        item.qty + 1
+                      )
+                    }
+                    className="p-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
+                  >
+                    <Plus size={14} />
+                  </button>
+                  <button
+                    disabled={actionLoading}
+                    onClick={() =>
+                      updateQty(user ? item.product : item.productId, 0)
+                    }
+                    className="p-2 bg-red-100 rounded hover:bg-red-200 disabled:opacity-50"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>{" "}
               </div>
-              <div className="flex mt-2 items-center gap-3">
-                <button
-                  disabled={actionLoading}
-                  onClick={() =>
-                    updateQty(
-                      user ? item.product : item.productId,
-                      item.qty - 1
-                    )
-                  }
-                  className="p-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
-                >
-                  <Minus size={14} />
-                </button>
-                <span className="font-semibold">{item.qty}</span>
-                <button
-                  disabled={actionLoading}
-                  onClick={() =>
-                    updateQty(
-                      user ? item.product : item.productId,
-                      item.qty + 1
-                    )
-                  }
-                  className="p-2 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
-                >
-                  <Plus size={14} />
-                </button>
-                <button
-                  disabled={actionLoading}
-                  onClick={() =>
-                    updateQty(user ? item.product : item.productId, 0)
-                  }
-                  className="p-2 bg-red-100 rounded hover:bg-red-200 disabled:opacity-50"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>{" "}
-            </div>
-          ))}
+            ))}
 
           {/* Totals */}
           <div className="border-t pt-6 space-y-2">

@@ -27,6 +27,7 @@ export default function AddToCartButton({ product }) {
             image: product.images?.[0],
             attributes: { size: product.size },
             qty: 1,
+            addedAt: new Date().toISOString(),
           });
         }
 

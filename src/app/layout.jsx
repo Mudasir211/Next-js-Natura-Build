@@ -75,7 +75,15 @@ export default function RootLayout({ children }) {
 
     <ClerkProvider>
         
-      <Toaster position="top-right" />
+      <Toaster  position="top-right"
+      toastOptions={{
+        
+        className: "bg-white shadow-lg border-l-4 border-green-700 rounded-xl px-6 py-4 text-gray-900 font-semibold",
+        duration: 4000,
+        style: {
+          marginTop: "40px", // move it a little down from the top
+          minWidth: "300px",}}}
+         />
     <html className={`${oswald.variable} ${outfit.variable}`} lang="en">
       <body
         className={outfit.className}
