@@ -7,66 +7,48 @@ import { Leaf, Globe, ShieldCheck } from "lucide-react";
 import BuyNowButton from "@/components/BuyNowButton";
 import RelatedProducts from "@/components/RelatedProducts";
 
-async function getProduct(id) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?id=${id}`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) throw new Error("Failed to fetch product");
-  return res.json();
+import { connectDB } from "@/lib/mongodb";
+import Product from "@/models/Product";
+import Review from "@/models/Review";
+
+// ✅ Enable ISR (like getStaticProps)
+export const revalidate = 60;
+
+async function getProduct(productId) {
+  await connectDB();
+  const product = await Product.findById(productId).lean();
+  if (!product) throw new Error("Product not found");
+  return JSON.parse(JSON.stringify(product)); // serialize
 }
 
 async function getReviews(productId) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews?product=${productId}`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) throw new Error("Failed to fetch reviews");
-  return res.json();
+  await connectDB();
+  const reviews = await Review.find({ product: productId })
+    .sort({ createdAt: -1 })
+    .lean();
+  return JSON.parse(JSON.stringify(reviews));
 }
 
 export async function generateMetadata({ params }) {
-  const { productId } = params;
-  const product = await getProduct(productId);
+  const product = await getProduct(params.productId);
 
   const firstImage =
     product.images && product.images.length > 0
       ? product.images[0]
-      : "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png"; // fallback logo
+      : "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png";
 
   return {
     title: `${product.title} | Natura.pk`,
     description:
       product.shortDescription ||
       `Buy ${product.title} at Natura.pk — premium herbal & organic products crafted for natural wellness and beauty.`,
-    keywords: [
-      product.title,
-      "Natura.pk",
-      "herbal products",
-      "organic skincare",
-      "herbal hair oil",
-      "bio organic hair oil",
-      "natural remedies",
-      "ayurvedic remedies",
-      "wellness products",
-    ],
     openGraph: {
       title: `${product.title} | Natura.pk`,
       description:
         product.shortDescription ||
         `Discover ${product.title}, made with natural ingredients for health & beauty.`,
       url: `https://naturapk.store/product/${product._id}`,
-      siteName: "Natura.pk",
-      images: [
-        {
-          url: firstImage,
-          width: 1200,
-          height: 630,
-          alt: product.title,
-        },
-      ],
-      locale: "en_PK",
-      type: "website", // ✅ must be website (Next.js safe)
+      images: [{ url: firstImage, width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image",
@@ -79,10 +61,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-
-
 export default async function ProductPage({ params }) {
   const { productId } = params;
+
   const product = await getProduct(productId);
   const reviews = await getReviews(productId);
 
@@ -102,10 +83,14 @@ export default async function ProductPage({ params }) {
         {/* Info */}
         <div className="flex-1 flex px-3 md:px-10 lg:px-0 flex-col gap-6">
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold text-green-800">{product.title}</h1>
+            <h1 className="text-3xl font-bold text-green-800">
+              {product.title}
+            </h1>
             <div className="flex items-center gap-2">
               <AverageStars averageRating={averageRating} size={18} />
-              <span className="text-sm text-gray-600">({reviews.length} reviews)</span>
+              <span className="text-sm text-gray-600">
+                ({reviews.length} reviews)
+              </span>
             </div>
 
             <h2 className="text-2xl font-semibold text-green-700">
@@ -135,39 +120,39 @@ export default async function ProductPage({ params }) {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              {/* Client component for Add to Cart */}
               <AddToCartButton product={product} />
-
-             <BuyNowButton product={product} qty={1} />
-
+              <BuyNowButton product={product} qty={1} />
             </div>
 
             {/* Trust Badges */}
             <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mt-8 text-green-800">
               <div className="flex flex-col items-center gap-2">
                 <Leaf className="w-8 h-8" />
-                <span className="font-bold text-xs sm:text-lg">100% Ayurvedic</span>
+                <span className="font-bold text-xs sm:text-lg">
+                  100% Ayurvedic
+                </span>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <Globe className="w-8 h-8" />
-                <span className="font-bold text-xs sm:text-lg">Export Quality</span>
+                <span className="font-bold text-xs sm:text-lg">
+                  Export Quality
+                </span>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <ShieldCheck className="w-8 h-8" />
-                <span className="font-bold text-xs sm:text-lg">Chemical Free</span>
+                <span className="font-bold text-xs sm:text-lg">
+                  Chemical Free
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Tabs */}
           <ProductTabs product={product} />
         </div>
       </div>
 
-      {/* Reviews */}
       <ProductReviews productId={product._id} />
-      <RelatedProducts category={product.category}/>
-      
+      <RelatedProducts category={product.category} />
     </div>
   );
 }
