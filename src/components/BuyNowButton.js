@@ -9,7 +9,7 @@ export default function BuyNowButton({ product, qty = 1 }) {
     try {
       const buyNowItem = {
         product: product._id,
-        name: product.title,
+        name: `${product.title} (${product.size})`,
         price: product.price,
         image: product.images?.[0] || "",
         qty,

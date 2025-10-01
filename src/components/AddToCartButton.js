@@ -22,7 +22,7 @@ export default function AddToCartButton({ product }) {
         } else {
           localCart.items.push({
             productId: product._id,
-            name: product.title,
+            name: `${product.title} (${product.size})`,
             price: product.price,
             image: product.images?.[0],
             attributes: { size: product.size },
@@ -45,7 +45,7 @@ export default function AddToCartButton({ product }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           productId: product._id,
-          name: product.title,
+          name: `${product.title} (${product.size})`,
           price: product.price,
           image: product.images?.[0],
           attributes: { size: product.size },
