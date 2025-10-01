@@ -3,54 +3,49 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-import rev1 from "../assets/rev1.jpeg";
-import rev2 from "../assets/rev2.jpeg";
-import rev3 from "../assets/rev3.jpeg";
-import rev4 from "../assets/rev4.jpeg";
-import rev5 from "../assets/rev5.jpeg";
-import rev6 from "../assets/rev6.jpeg";
+
 import { Oswald } from "next/font/google";
 
 const oswald = Oswald({ subsets: ["latin"], weight: "700" });
 export default function StoryReviews() {
   const reviews = [
     {
-      src: rev1,
+      src: '/rev1.jpeg',
       author: "Rizwan Ali.",
       rating: 5,
       excerpt:
         "Ma abhi tak 2 bottle use kar chuka hon This product is literally magical Meri hair line bhot khrab hogai thi or Literally meri regrowth start hoi or ab meri hair line bhot achi hogai 100 percent recommend Sukriya to you guys Allah kush rkha.",
     },
     {
-      src: rev2,
+      src: '/rev2.jpeg',
       author: "Rizwan Ali.",
       rating: 5,
       excerpt:
         "",
     },
     {
-      src: rev3,
+      src: '/rev3.jpeg',
       author: "Sara Ali.",
       rating: 5,
       excerpt:
         "Its been a wonderful experience, i will order again soon, as its finishing already. My kids hair were really frizzy, and at front head hair were less, but now mashaa Allah it's growing so quick and looks more beautiful silky and shiny. I will share the photos too.",
     },
     {
-      src: rev4,
+      src: '/rev4.jpeg',
       author: "Omar N.",
       rating: 5,
       excerpt:
         "I used half of the bottle Brother Aresults bhot acha Iga impressing 4 5 bar use krna se baal bikul silky hogai lak dost ko bi recommend kia woh bi ap se order kra ga Love this product.",
     },
     {
-      src: rev5,
+      src: '/rev5.jpeg',
       author: "Ehtisham Malik.",
       rating: 5,
       excerpt:
         "Mana abhi 4 5 bar use kia Or 5 wash ma hi baal bikul maza dar hogai Bhot fizzy or dry tha Density bi zada Igrhi ha Ap ko pta hna mera balo ki density zada ki vja se rough lagta tha Ikin is se bikul silky hogai Ya khtam ho la phir in sha allah 2 or manvani Apna dost ka liya bi",
     },
     {
-      src: rev6,
+      src: '/rev6.jpeg',
       author: "Hassan A.",
       rating: 5,
       excerpt:
