@@ -61,6 +61,9 @@ export default async function RelatedProducts({ category }) {
                       Bestseller
                     </span>
                   )}
+                  <div className="absolute bottom-0 rounded-tl-3xl right-[0px] z-40 bg-[#a5432a] text-white  font-semibold pr-3 text-xs pl-5 py-1  shadow-md">
+      {item.size}
+    </div>
                     <img
                       src={item.images[0]}
                       alt={item.title}
@@ -83,9 +86,9 @@ export default async function RelatedProducts({ category }) {
                         <span className="font-bold text-green-700">
                           Rs {item.price}
                         </span>
-                        <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
+                        {item.discountPercentage>0 &&   <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
                           -{item.discountPercentage}%
-                        </span>
+                        </span>}
                       </div>
                     ) : (
                       <p className="font-bold text-green-700 mt-1">

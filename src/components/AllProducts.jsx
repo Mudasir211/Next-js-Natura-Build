@@ -55,6 +55,13 @@ export default async function AllProducts() {
                       Bestseller
                     </span>
                   )}
+
+
+                  
+    <div className="absolute bottom-0 rounded-tl-3xl right-[0px] z-40 bg-[#a5432a] text-white  font-semibold pr-3 text-xs pl-5 py-1  shadow-md">
+      {item.size}
+    </div>
+  
                     <img
                       src={item.images[0]}
                       alt={item.title}
