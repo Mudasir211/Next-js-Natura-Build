@@ -100,9 +100,9 @@ export default async function ProductPage({ params }) {
                     Rs.{product.cuttedPrice}
                   </span>
                   Rs.{product.price}{" "}
-                  <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
+                {  product.discountPercentage> 0 && <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
                     -{product.discountPercentage}%
-                  </span>
+                  </span>}
                 </>
               ) : (
                 `Rs.${product.price}`
