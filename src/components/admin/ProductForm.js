@@ -2,6 +2,11 @@
 import { useState, useEffect } from "react";
 import ProductImageUpload from "./ProductImageUpload";
 import { Leaf } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// ✅ Dynamically import ReactQuill (no SSR)
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+import "react-quill-new/dist/quill.snow.css";
 
 export default function ProductForm({ onSubmit, initialData, onCancel }) {
   const [title, setTitle] = useState(initialData?.title || "");
@@ -19,7 +24,7 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
     initialData?.discountPercentage || 0
   );
   const [category, setCategory] = useState(initialData?.category || "");
-  const [categories, setCategories] = useState([]); // fetched categories
+  const [categories, setCategories] = useState([]);
   const [size, setSize] = useState(initialData?.size || "");
   const [ingredients, setIngredients] = useState(
     initialData?.ingredients?.join(", ") || ""
@@ -83,6 +88,19 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
     }
   };
 
+  const quillModules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      [{ font: [] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ align: [] }],
+      [{ color: [] }, { background: [] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["blockquote", "code-block"],
+      ["clean"],
+    ],
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -107,31 +125,31 @@ export default function ProductForm({ onSubmit, initialData, onCancel }) {
         />
       </div>
 
-      {/* Short Description */}
+      {/* Short Description (ReactQuill) */}
       <div>
         <label className="block text-sm font-medium text-green-800 mb-1">
           Short Description
         </label>
-        <textarea
-          placeholder="Write a short description..."
-          className="border border-green-300 focus:border-green-500 focus:ring-green-200 w-full p-3 rounded-lg shadow-sm"
-          rows={2}
+        <ReactQuill
+          theme="snow"
           value={shortDescription}
-          onChange={(e) => setShortDescription(e.target.value)}
+          onChange={setShortDescription}
+          modules={quillModules}
+          className="bg-white rounded-lg shadow-sm"
         />
       </div>
 
-      {/* Full Description */}
+      {/* Full Description (ReactQuill) */}
       <div>
         <label className="block text-sm font-medium text-green-800 mb-1">
           Full Description
         </label>
-        <textarea
-          placeholder="Write a detailed description..."
-          className="border border-green-300 focus:border-green-500 focus:ring-green-200 w-full p-3 rounded-lg shadow-sm"
-          rows={4}
+        <ReactQuill
+          theme="snow"
           value={fullDescription}
-          onChange={(e) => setFullDescription(e.target.value)}
+          onChange={setFullDescription}
+          modules={quillModules}
+          className="bg-white rounded-lg shadow-sm"
         />
       </div>
 

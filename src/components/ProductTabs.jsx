@@ -1,4 +1,5 @@
 import { FileText, Hand, FlaskConical } from "lucide-react";
+import DOMPurify from "isomorphic-dompurify";
 
 export default function ProductTabs({ product }) {
   const tabs = [
@@ -26,11 +27,12 @@ export default function ProductTabs({ product }) {
     <div className="mt-8 flex flex-col gap-3">
       {tabs.map((tab) => {
         const Icon = tab.icon;
+        const sanitizedContent =
+          tab.key !== "ingredients"
+            ? DOMPurify.sanitize(tab.content)
+            : tab.content;
         return (
-          <details
-            key={tab.key}
-            className=" outline-1 rounded-lg shadow-sm group"
-          >
+          <details key={tab.key} className="outline-1 rounded-lg shadow-sm group">
             <summary className="flex justify-between items-center cursor-pointer px-4 py-3 text-sm font-medium bg-gray-50 hover:bg-green-50 hover:text-green-800 text-gray-700 group-open:bg-green-100 group-open:text-green-800">
               <span className="flex items-center gap-2">
                 <Icon className="w-4 h-4" />
@@ -50,7 +52,9 @@ export default function ProductTabs({ product }) {
                   ))}
                 </ul>
               ) : (
-                <p>{tab.content}</p>
+                <div
+                  dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                />
               )}
             </div>
           </details>
