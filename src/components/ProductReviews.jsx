@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Edit2, Trash2, Check, X, Verified } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import RatingSystem from "./RatingSystem";
 import AverageStars from "./AverageStars";
 import { SelectableStar } from "./SelectableStar";
@@ -18,6 +19,7 @@ const stringToColor = (str) => {
 
 export default function ProductReviews({ productId }) {
   const { user, isLoaded } = useUser();
+  const router = useRouter();
 
   const [reviews, setReviews] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -61,7 +63,7 @@ export default function ProductReviews({ productId }) {
           comment,
           name,
           images,
-          userEmail: user.primaryEmailAddress?.emailAddress || "", // ✅ send Clerk email
+          userEmail: user.primaryEmailAddress?.emailAddress || "",
         }),
       });
 
@@ -128,10 +130,16 @@ export default function ProductReviews({ productId }) {
         <RatingSystem ratings={reviews} averageRating={averageRating} />
 
         {/* Write a Review Button */}
-        {user && !hasReviewed && !editingId && (
+        {!editingId && (
           <div className="mt-6 flex justify-center">
             <button
-              onClick={() => setShowForm(!showForm)}
+              onClick={() => {
+                if (!user) {
+                  router.push("/sign-in"); // redirect to Clerk login
+                } else {
+                  setShowForm(!showForm);
+                }
+              }}
               className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium"
             >
               {showForm ? "Close Form" : "Write a Review"}
@@ -146,110 +154,111 @@ export default function ProductReviews({ productId }) {
           <h3 className="text-xl font-semibold mb-4 text-green-700">
             {editingId ? "Edit Your Review" : "Write a Review"}
           </h3>
-         <form
-  onSubmit={handleSubmit}
-  className="space-y-6 bg-white p-6 rounded-2xl shadow-lg border border-gray-100 max-w-xl mx-auto"
->
-  {/* Name */}
-  <div className="space-y-2">
-    <label className="block text-sm font-medium text-gray-700">
-      Display Name
-    </label>
-    <input
-      type="text"
-      placeholder="Your display name"
-      value={name}
-      maxLength={20}
-      onChange={(e) => setName(e.target.value)}
-      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
-      required
-    />
-  </div>
 
-  {/* Title */}
-  <div className="space-y-2">
-    <label className="block text-sm font-medium text-gray-700">
-      Review Title
-    </label>
-    <input
-      type="text"
-      placeholder="e.g. Amazing product!"
-      value={title}
-      maxLength={30}
-      onChange={(e) => setTitle(e.target.value)}
-      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
-      required
-    />
-  </div>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 bg-white p-6 rounded-2xl shadow-lg border border-gray-100 max-w-xl mx-auto"
+          >
+            {/* Name */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Display Name
+              </label>
+              <input
+                type="text"
+                placeholder="Your display name"
+                value={name}
+                maxLength={20}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+                required
+              />
+            </div>
 
-  {/* Rating */}
-  <div className="space-y-2">
-    <label className="block text-sm font-medium text-gray-700">
-      Rating
-    </label>
-    <div className="flex items-center gap-2">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <SelectableStar
-          key={i}
-          filled={i < rating}
-          size={32}
-          onClick={() => setRating(i + 1)}
-          className="cursor-pointer transition-transform hover:scale-110"
-        />
-      ))}
-    </div>
-  </div>
+            {/* Title */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Review Title
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Amazing product!"
+                value={title}
+                maxLength={30}
+                required
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+            
+              />
+            </div>
 
-  {/* Comment */}
-  <div className="space-y-2">
-    <label className="block text-sm font-medium text-gray-700">
-      Your Review
-    </label>
-    <textarea
-      value={comment}
-      onChange={(e) => setComment(e.target.value)}
-      rows={4}
-      maxLength={400}
-      placeholder="Write your detailed review..."
-      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition resize-none"
-      required
-    />
-  </div>
+            {/* Rating */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Rating
+              </label>
+              <div className="flex items-center gap-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <SelectableStar
+                    key={i}
+                    filled={i < rating}
+                    size={32}
+                    onClick={() => setRating(i + 1)}
+                    className="cursor-pointer transition-transform hover:scale-110"
+                  />
+                ))}
+              </div>
+            </div>
 
-  {/* Image Upload */}
-  <div className="space-y-2">
-    <label className="block text-sm font-medium text-gray-700">
-      Upload Images (optional)
-    </label>
-    <ReviewImageUpload images={images} setImages={setImages} />
-  </div>
+            {/* Comment */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Your Review
+              </label>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={4}
+                maxLength={400}
+                placeholder="Write your detailed review..."
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition resize-none"
+                
+              />
+            </div>
 
-  {/* Buttons */}
-  <div className="flex gap-4 justify-end pt-4">
-    <button
-      type="button"
-      onClick={() => {
-        setShowForm(false);
-        setEditingId(null);
-        setRating(5);
-        setTitle("");
-        setComment("");
-        setImages([]);
-      }}
-      className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center gap-2 text-gray-700 transition"
-    >
-      <X size={18} /> Cancel
-    </button>
-    <button
-      type="submit"
-      className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl flex items-center gap-2 shadow-md transition"
-    >
-      <Check size={20} />
-      {editingId ? "Update Review" : "Submit Review"}
-    </button>
-  </div>
-</form>
+            {/* Image Upload */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Upload Images (optional)
+              </label>
+              <ReviewImageUpload images={images} setImages={setImages} />
+            </div>
 
+            {/* Buttons */}
+            <div className="flex gap-4 justify-end pt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowForm(false);
+                  setEditingId(null);
+                  setRating(5);
+                  setTitle("");
+                  setComment("");
+                  setImages([]);
+                }}
+                className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center gap-2 text-gray-700 transition"
+              >
+                <X size={18} /> Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl flex items-center gap-2 shadow-md transition"
+              >
+                <Check size={20} />
+                {editingId ? "Update Review" : "Submit Review"}
+              </button>
+            </div>
+          </form>
         </div>
       )}
 
@@ -303,9 +312,7 @@ export default function ProductReviews({ productId }) {
                         <div
                           key={i}
                           className="relative w-20 h-20 rounded-lg overflow-hidden border cursor-pointer hover:scale-105 transition"
-                          onClick={() =>
-                            setLightbox({ open: true, url })
-                          }
+                          onClick={() => setLightbox({ open: true, url })}
                         >
                           <img
                             src={url}
@@ -384,18 +391,16 @@ export default function ProductReviews({ productId }) {
           </button>
         </div>
       )}
-      {/* Integrity Note */}
-<div className="max-w-2xl mx-auto mt-16 text-center flex flex-col items-center gap-4 text-sm text-gray-500 border-t pt-6">
- <Verified className="h-10 mt-4
-     w-10"/>  
-  <p>
-    
-    All reviews are submitted by verified customers using their Clerk
-    account. Each review is tied to a real email address to ensure
-    authenticity and maintain trust in our community.
-  </p>
-</div>
 
+      {/* Integrity Note */}
+      <div className="max-w-2xl mx-auto mt-16 text-center flex flex-col items-center gap-4 text-sm text-gray-500 border-t pt-6">
+        <Verified className="h-10 mt-4 w-10" />
+        <p>
+          All reviews are submitted by verified customers using their Clerk
+          account. Each review is tied to a real email address to ensure
+          authenticity and maintain trust in our community.
+        </p>
+      </div>
     </div>
   );
 }
