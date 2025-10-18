@@ -119,7 +119,7 @@ export default function ContactPage() {
       </section>
 
       {/* CONTACT CARDS */}
-      <section className="max-w-7xl mt-10 mx-auto px-6 -mt-10 pb-6">
+      <section className="max-w-7xl mt-10 mx-auto px-6  pb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="rounded-2xl bg-white shadow-sm hover:shadow-md transition p-6">
             <div className="flex items-center gap-3">
@@ -220,7 +220,7 @@ export default function ContactPage() {
                   Facebook
                 </a>
                 <a
-                  href="https://www.instagram.com/thenatura.pk/?igsh=d2IwNWx5aXQxemxl#"
+                  href="https://www.instagram.com/naturapk.store?igsh=cGJuazU3Z2tpdnVj"
                   target="_blank"
                   aria-label="Instagram"
                   className="inline-flex items-center gap-2 rounded-full border px-4 py-2 hover:bg-gray-50"
@@ -324,7 +324,7 @@ export default function ContactPage() {
             ],
             sameAs: [
               "https://www.facebook.com/thenatura.pk/",
-              "https://www.instagram.com/thenatura.pk/",
+              "https://www.instagram.com/naturapk.store?igsh=cGJuazU3Z2tpdnVj",
             ],
             url: "https://your-domain.com/contact",
           }),

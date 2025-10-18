@@ -88,7 +88,7 @@ export default function CartDrawer() {
     (acc, item) => acc + item.price * item.qty,
     0
   );
-  const shipping = cart.items.length > 0 ? 250 : 0;
+  const shipping = cart.items.length > 0 ? 150 : 0;
   const total = subtotal + shipping;
 
   return (

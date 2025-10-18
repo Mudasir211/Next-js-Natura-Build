@@ -147,7 +147,7 @@ export default function Footer() {
               <Facebook className="w-5 h-5" /> Facebook
             </a>
             <a
-              href="https://www.instagram.com/thenatura.pk/?igsh=d2IwNWx5aXQxemxl#"
+              href="https://www.instagram.com/naturapk.store?igsh=cGJuazU3Z2tpdnVj"
               target="_blank"
               className="hover:text-green-300 flex items-center gap-2"
             >
