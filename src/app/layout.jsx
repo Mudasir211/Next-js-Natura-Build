@@ -68,6 +68,8 @@ export const metadata = {
     images: [
       "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png",
     ],
+  },other: {
+    'facebook-domain-verification': 'bvaxv47l5ywggys523tgdypyr7adxa',
   },
 };
 
