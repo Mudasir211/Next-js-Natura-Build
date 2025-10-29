@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 
 import NextTopLoader from "nextjs-toploader";
 import SignInReminder from "@/components/SignInReminder";
+import MetaPixel from "@/components/MetaPixel";
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -93,6 +94,7 @@ export default function RootLayout({ children }) {
     <Navbar/>
     <NextTopLoader color="#22c55e" height={3} showSpinner={false} />
     <SignInReminder />
+    <MetaPixel />
         {children}
         <Footer/>
       </body>
