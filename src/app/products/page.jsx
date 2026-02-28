@@ -32,10 +32,11 @@ async function fetchCategories() {
 
 // app/products/page.jsx
 export async function generateMetadata({ searchParams }) {
-  const search = searchParams?.search || "";
-  const categoryParam = searchParams?.category || "";
+     const params = await searchParams;
+  const search = params?.search || "";
+  const categoryParam = params?.category || "";
   const categoriesSelected = categoryParam ? categoryParam.split(",") : [];
-  const bestseller = searchParams?.bestseller === "true";
+  const bestseller = params?.bestseller === "true";
 
   let title = "Our Products | Natura.pk";
   let description =
@@ -106,11 +107,12 @@ export async function generateMetadata({ searchParams }) {
 }
 
 export default async function ProductsPage({ searchParams }) {
-  const search = searchParams?.search || "";
-  const categoryParam = searchParams?.category || "";
+     const params = await searchParams;
+  const search = params?.search || "";
+  const categoryParam = params?.category || "";
   const categoriesSelected = categoryParam ? categoryParam.split(",") : [];
-  const sort = searchParams?.sort || "";
-  const bestseller = searchParams?.bestseller === "true";
+  const sort = params?.sort || "";
+  const bestseller = params?.bestseller === "true";
 
   const [products, categories] = await Promise.all([
     fetchProducts({ search, categories: categoriesSelected, sort, bestseller }),

@@ -4,7 +4,8 @@ import { currentUser } from "@clerk/nextjs/server";
 
 export async function GET(req, { params }) {
   await connectDB();
-  const product = await Product.findById(params.id).populate("category");
+  const { id } = await params;
+  const product = await Product.findById(id).populate("category");
   if (!product)
     return new Response(JSON.stringify({ message: "Not found" }), {
       status: 404,
@@ -14,6 +15,8 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   await connectDB();
+  const { id } = await params;
+
   const user = await currentUser();
 
   if (!user || user.publicMetadata?.role !== "admin") {
@@ -23,7 +26,7 @@ export async function PUT(req, { params }) {
   }
 
   const body = await req.json();
-  const updated = await Product.findByIdAndUpdate(params.id, body, {
+  const updated = await Product.findByIdAndUpdate(id, body, {
     new: true,
   });
 
@@ -36,6 +39,8 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   await connectDB();
+  const { id } = await params;
+
   const user = await currentUser();
 
   if (!user || user.publicMetadata?.role !== "admin") {
@@ -44,6 +49,6 @@ export async function DELETE(req, { params }) {
     });
   }
 
-  await Product.findByIdAndDelete(params.id);
+  await Product.findByIdAndDelete(id);
   return new Response(JSON.stringify({ message: "Deleted" }), { status: 200 });
 }

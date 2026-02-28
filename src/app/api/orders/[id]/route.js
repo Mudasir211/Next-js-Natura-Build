@@ -8,11 +8,12 @@ import { statusUpdateTemplate } from "@/lib/emailTemplates";
 export async function GET(req, { params }) {
   try {
     await connectDB();
+    const { id } = await params;
     const user = await currentUser();
     if (!user)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-    const order = await Order.findById(params.id);
+    const order = await Order.findById(id);
     if (!order)
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
@@ -25,7 +26,7 @@ export async function GET(req, { params }) {
     console.error(err);
     return NextResponse.json(
       { message: "Failed to fetch order" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -33,12 +34,14 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   try {
     await connectDB();
+    const { id } = await params;
+
     const user = await currentUser();
     if (!user)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const body = await req.json();
-    const order = await Order.findById(params.id);
+    const order = await Order.findById(id);
     if (!order)
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
@@ -69,7 +72,7 @@ export async function PUT(req, { params }) {
     console.error(err);
     return NextResponse.json(
       { message: "Failed to update order" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

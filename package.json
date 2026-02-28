@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.32.0",
+    "@clerk/nextjs": "^6.39.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.3.2",
@@ -26,7 +26,7 @@
     "lucide-react": "^0.541.0",
     "mongoose": "^8.15.1",
     "nanoid": "^5.1.6",
-    "next": "15.3.2",
+    "next": "^16.1.6",
     "next-cloudinary": "^6.16.0",
     "nextjs-toploader": "^3.9.17",
     "nodemailer": "^7.0.6",

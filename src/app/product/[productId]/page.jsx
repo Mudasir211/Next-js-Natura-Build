@@ -10,6 +10,8 @@ import RelatedProducts from "@/components/RelatedProducts";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/Product";
 import Review from "@/models/Review";
+import RamadanSaleCountdown from "@/components/RamadanSaleCountdown";
+import LiveViewers from "@/components/LiveViewers";
 
 export const revalidate = 60;
 
@@ -29,7 +31,8 @@ async function getReviews(productId) {
 }
 
 export async function generateMetadata({ params }) {
-  const product = await getProduct(params.productId);
+ const { productId } = await params;
+  const product = await getProduct(productId);
   const firstImage =
     product.images?.[0] ||
     "https://res.cloudinary.com/dokusdeg3/image/upload/v1758715263/logo_zj8pjv.png";
@@ -43,7 +46,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductPage({ params }) {
-  const { productId } = params;
+  const { productId } =await params;
   const product = await getProduct(productId);
   const reviews = await getReviews(productId);
 
@@ -56,6 +59,7 @@ export default async function ProductPage({ params }) {
 
   return (
     <div className="mt-5 px-4 sm:px-8 py-14 outfit bg-green-50">
+        <RamadanSaleCountdown/>
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1">
           <ProductGallery images={product.images} title={product.title} />
@@ -134,7 +138,7 @@ export default async function ProductPage({ params }) {
           <ProductTabs product={product} />
         </div>
       </div>
-
+<LiveViewers/>
       <ProductReviews productId={product._id} />
       <RelatedProducts category={product.category} />
     </div>

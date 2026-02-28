@@ -5,6 +5,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 export async function PUT(req, { params }) {
   await connectDB();
+  const { productId } = await params;
   const user = await currentUser();
   if (!user)
     return Response.json({ message: "Not authorized" }, { status: 401 });
@@ -14,16 +15,12 @@ export async function PUT(req, { params }) {
   if (!cart)
     return Response.json({ message: "Cart not found" }, { status: 404 });
 
-  const item = cart.items.find(
-    (i) => i.product.toString() === params.productId
-  );
+  const item = cart.items.find((i) => i.product.toString() === productId);
   if (!item)
     return Response.json({ message: "Item not found" }, { status: 404 });
 
   if (qty <= 0) {
-    cart.items = cart.items.filter(
-      (i) => i.product.toString() !== params.productId
-    );
+    cart.items = cart.items.filter((i) => i.product.toString() !== productId);
   } else {
     item.qty = qty;
   }

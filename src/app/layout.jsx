@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
 import SignInReminder from "@/components/SignInReminder";
 import MetaPixel from "@/components/MetaPixel";
+import ConditionalRamadanBanner from "@/components/ConditionalRamadanBanner";
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -94,6 +95,7 @@ export default function RootLayout({ children }) {
       >
        
     <Navbar/>
+    <ConditionalRamadanBanner/>
     <NextTopLoader color="#22c55e" height={3} showSpinner={false} />
     <SignInReminder />
     <MetaPixel />
