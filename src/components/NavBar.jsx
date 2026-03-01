@@ -5,6 +5,7 @@ import Logo from "../assets/logo.png";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import CategoriesDropdown from "./CategoriesDropdown";
+import AuthButtons from "./AuthButtons";
 
 export default async function Navbar() {
   const user = await currentUser();
@@ -53,17 +54,7 @@ export default async function Navbar() {
             </div>
           ))}
           {/* Clerk Auth */}
-          <SignedOut>
-            <Link
-              href="/sign-in"
-              className="px-4 py-2 bg-green-700 text-white rounded-lg shadow hover:bg-green-800 transition"
-            >
-              Sign In
-            </Link>
-          </SignedOut>
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
+          <AuthButtons />
         </div>
 
         {/* Mobile Menu */}

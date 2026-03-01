@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function RamadanSaleBanner() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const pathname = usePathname();
 
 
@@ -12,9 +12,7 @@ export default function RamadanSaleBanner() {
       if (!shouldShow) return; // Do not show on other pages
 
     // Show after 2 seconds on first render
-    const initialTimer = setTimeout(() => {
-      setVisible(true);
-    }, 2000);
+    
 
     // Then keep toggling (come & go)
     const interval = setInterval(() => {
@@ -22,7 +20,7 @@ export default function RamadanSaleBanner() {
     }, 5000); // every 5 seconds
 
     return () => {
-      clearTimeout(initialTimer);
+    
       clearInterval(interval);
     };
   }, []);
